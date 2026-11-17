@@ -62,3 +62,10 @@ Visitor stats: make a free GoatCounter account and paste its one script line jus
 ## Credits
 
 Moon color map: NASA Goddard Scientific Visualization Studio, CGI Moon Kit (LRO data, public domain). Earth outlines: Natural Earth via world-atlas.
+
+
+## The rocket game
+
+On computers (not phones or tablets), a "Fly the rocket" button sits in the bottom-left corner. Pressing it or the G key starts a game: steer with the left and right arrows (or A and D), boost with up (or W), collect glowing cells for points (gold ones are worth 50), and avoid your own trail and the page edges. Esc quits. The best score is saved in each visitor's browser.
+
+To remove it, set `game: false` in `SITE` in content.js.

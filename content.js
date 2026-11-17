@@ -20,14 +20,16 @@
    ===================================================================== */
 const SITE = {
   name: "Laurenz Felix",
-  eyebrow: "Chemical Engineering · UC Irvine · Class of 2028",
+  eyebrow: "UC Irvine · Class of 2028",
   headline: "Laurenz Felix",
-  lede: "I study <b>chemical engineering specializing in Energy and Sustainability, minoring in materials science</b> at UC Irvine, and I'm working toward a career in <b>space</b>.",
+  status: "Open to Summer 2027 internships",       // the small badge above your name; set to "" to hide it
+  lede: "Chemical engineering, specializing in <b>energy and sustainability</b>, with a materials science minor. I build <b>rockets and spacecraft propulsion</b>, and I'm chasing a career in space.",
   secondHeadline: "Chemistry first. Then hardware.",
   secondLede: "I research the chemistry behind chipmaking, and I build <b>thrusters, rockets, and the rigs to test them</b>. The question I keep asking is what a part is made of and why.",
   now: "Finished my PFAS research paper and presenting it Nov 23, working through the valve trade study for our CubeSat thruster, and assembling my Level 1 rocket.",
   resumeUrl: "files/Laurenz_Felix_Resume.pdf",  // the PDF lives in the files folder
   showTeamDetails: false,                        // flip to true once the SEDS lead approves sharing trade study results
+  game: true,                                    // the "Fly the rocket" game button (computers only); set false to remove it
   showPlaceholders: true,                        // empty photo and drawing slots; set false to hide them
   earthMap: "images/earth-cute.png",            // the stylized Earth at the bottom
   moonMap: "images/moon-2k.jpg",                 // NASA LRO color map (public domain)
@@ -109,7 +111,9 @@ const FEATURED = [
       "Transducer trade study result: the Bradford mini-SAPT scored highest at 76%."
     ],
     slots: ["Thruster CAD", "Flow simulation plot"],
-    images: [],
+    images: [
+      { src: "images/seds-dragsail-concept.jpg", paper: true, credit: "Concept sketch by SEDS leads", alt: "Line sketch of the Drag Sail Deorbit craft: a CubeSat body with a capture net on top, magnetic detumblers, thrusters on the sides, and four booms holding sail panels below.", caption: "Preliminary concept sketch of the whole craft, shared by the SEDS project leads. Not my drawing and not the final design. Thruster count is still under study." }
+    ],
     drawings: []
   },
   {

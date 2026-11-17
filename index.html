@@ -81,6 +81,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .step { grid-area: 1 / 1; max-width: 600px; align-self: end; }
 .motion .step-b { opacity: 0; }
 .eyebrow { color: var(--muted); margin-bottom: 20px; display: block; }
+.avail { display: inline-flex; align-items: center; gap: 9px; padding: 6px 13px 6px 11px; border-radius: 999px; border: 1px solid rgba(120,220,160,0.28); background: rgba(80,200,130,0.07); color: #bfeccf; font-size: 0.74rem; letter-spacing: 0.04em; margin-bottom: 26px; }
+.avail i { width: 7px; height: 7px; border-radius: 50%; background: #5fdc95; box-shadow: 0 0 0 0 rgba(95,220,149,0.5); animation: ping 2.6s ease-out infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(95,220,149,0.45); } 70%, 100% { box-shadow: 0 0 0 8px rgba(95,220,149,0); } }
+.idrow { display: flex; align-items: center; gap: clamp(14px, 2.2vw, 24px); }
+.idrow .eyebrow { margin-bottom: 8px; }
+.hshot { width: clamp(64px, 8vw, 92px); height: clamp(64px, 8vw, 92px); flex: none; border-radius: 50%; object-fit: cover; object-position: 50% 22%; border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 0 0 4px rgba(255,255,255,0.03), 0 10px 30px rgba(0,0,0,0.5); }
+@media (prefers-reduced-motion: reduce) { .avail i { animation: none; } }
 .hero h1 { font-size: clamp(2.6rem, 6.8vw, 5.2rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1.02; padding-bottom: 0.06em; }
 .hero h2 { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 600; letter-spacing: -0.04em; padding-bottom: 0.06em; }
 .hero .lede { margin-top: 22px; font-size: clamp(1.02rem, 1.6vw, 1.18rem); color: var(--muted); max-width: 50ch; }
@@ -90,13 +97,45 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .now .mono { color: var(--muted); }
 .now p { font-size: 0.97rem; flex: 1 1 280px; }
 .static .step-b { margin-top: 56px; grid-area: auto; }
-#rocket { position: absolute; left: 0; top: 0; z-index: 2; width: 92px; pointer-events: none; transform-origin: 50% 50%; filter: drop-shadow(0 0 10px rgba(255,255,255,0.18)); will-change: transform; }
+#rocket { position: absolute; left: 0; top: 0; z-index: 2; width: 92px; pointer-events: none; transform-origin: 50% 50%; filter: drop-shadow(0 0 1.5px rgba(0,0,0,0.95)) drop-shadow(0 0 10px rgba(255,255,255,0.18)); will-change: transform, opacity; }
 #rocket svg, .rail-rocket svg { display: block; width: 100%; height: auto; overflow: visible; }
 .telemetry { position: absolute; z-index: 3; right: 24px; bottom: 26px; text-align: right; display: grid; gap: 2px; color: var(--muted); }
 .telemetry b { font-family: var(--mono); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
 .cue { position: absolute; z-index: 3; left: 50%; bottom: 22px; transform: translateX(-50%); color: var(--faint); display: grid; justify-items: center; gap: 6px; }
 .cue::after { content: ""; width: 1px; height: 26px; background: linear-gradient(var(--faint), transparent); }
 .static .cue, .static .telemetry { display: none; }
+
+.cover { position: relative; }
+.cover .credit { position: absolute; left: 10px; bottom: 10px; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; color: #e9ebee; background: rgba(5,6,8,0.78); border: 1px solid rgba(255,255,255,0.14); padding: 3px 8px; border-radius: 6px; }
+
+/* ---------- Rocket game (desktop only) ---------- */
+.play { position: fixed; z-index: 26; left: 22px; bottom: 22px; display: none; align-items: center; gap: 9px; padding: 9px 15px 9px 12px; border-radius: 999px; border: 1px solid var(--line-2); background: rgba(10,12,16,0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--ink); font: 500 0.82rem var(--display); cursor: pointer; transition: border-color .2s, transform .2s; }
+.play:hover { border-color: #6a707c; transform: translateY(-1px); }
+.play svg { width: 26px; height: auto; transform: rotate(-45deg); }
+.play kbd { font-family: var(--mono); font-size: 0.66rem; color: var(--muted); border: 1px solid var(--line-2); border-radius: 4px; padding: 0 5px; }
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) { .play { display: inline-flex; } }
+.gaming .play { display: none; }
+#game { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 40; pointer-events: none; display: none; }
+.gaming #game { display: block; }
+.ghud { position: fixed; z-index: 41; left: 22px; bottom: 22px; display: none; gap: 4px; padding: 12px 16px; border-radius: 14px; border: 1px solid var(--line-2); background: rgba(8,9,12,0.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-family: var(--mono); font-size: 0.72rem; color: var(--muted); min-width: 190px; }
+.gaming .ghud { display: grid; }
+.ghud b { font-size: 1.6rem; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.ghud .keys { margin-top: 6px; line-height: 1.7; }
+.ghud kbd, .gover kbd { font-family: var(--mono); color: var(--ink); border: 1px solid var(--line-2); border-radius: 4px; padding: 0 5px; font-size: 0.68rem; }
+.gtoast { position: fixed; z-index: 41; left: 50%; top: 84px; transform: translate(-50%, -6px); opacity: 0; transition: opacity .25s, transform .25s; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.05em; color: var(--ink); background: rgba(8,9,12,0.86); border: 1px solid var(--line-2); padding: 6px 12px; border-radius: 999px; pointer-events: none; white-space: nowrap; }
+.gtoast.on { opacity: 1; transform: translate(-50%, 0); }
+.gover { position: fixed; z-index: 42; inset: 0; display: none; place-items: center; background: rgba(3,4,6,0.55); }
+.gover.on { display: grid; }
+.gover .box { width: min(380px, calc(100% - 40px)); padding: 28px; border-radius: 20px; border: 1px solid var(--line-2); background: var(--bg-2); text-align: center; display: grid; gap: 10px; }
+.gover .box h3 { font-size: 1.5rem; }
+.gover .box .big { font-family: var(--mono); font-size: 2.6rem; color: var(--ink); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.gover .box p { color: var(--muted); font-size: 0.92rem; }
+.gover .btn.solid kbd { color: #0b0c0f; border-color: rgba(0,0,0,0.3); }
+.gover .row { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+
+/* ---------- Side starfield ---------- */
+#sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
+main, footer { position: relative; z-index: 1; }
 
 /* ---------- Flight rail ---------- */
 .rail { position: fixed; z-index: 25; right: 22px; top: 96px; bottom: 36px; width: 26px; display: none; opacity: 0; transition: opacity .4s; }
@@ -336,6 +375,8 @@ blockquote { margin: 0; padding-left: 18px; border-left: 2px solid #c9ccd2; font
   <div class="rail-rocket" id="railRocket"></div>
 </aside>
 
+<canvas id="sky" aria-hidden="true"></canvas>
+
 <main id="top">
   <section class="hero" id="hero" aria-label="Introduction">
     <div class="stage">
@@ -357,6 +398,26 @@ blockquote { margin: 0; padding-left: 18px; border-left: 2px solid #c9ccd2; font
   <section class="band" id="leadership"><div class="wrap" id="leadershipBody"></div></section>
   <section class="band" id="contact"><div class="wrap" id="contactBody"></div></section>
 </main>
+
+<button class="play" id="playBtn" type="button" aria-label="Play a game: fly the rocket around the page">
+  <svg viewBox="0 0 130 30" aria-hidden="true"><path d="M30 9 H96 C110 9 122 12 128 15 C122 18 110 21 96 21 H30 Z" fill="#e9ebee"/><path d="M30 9 L18 2 L38 9 Z M30 21 L18 28 L38 21 Z" fill="#aeb3ba"/></svg>
+  Fly the rocket <kbd>G</kbd>
+</button>
+<canvas id="game" aria-hidden="true"></canvas>
+<div class="ghud" id="ghud" aria-live="polite">
+  <span>SCORE</span><b id="gScore">0</b><span id="gBest">Best 0</span>
+  <span class="keys"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> steer &nbsp; <kbd>&uarr;</kbd> boost<br><kbd>Esc</kbd> quit</span>
+</div>
+<div class="gtoast" id="gToast"></div>
+<div class="gover" id="gOver" role="dialog" aria-labelledby="gOverT">
+  <div class="box">
+    <span class="mono" style="color:var(--muted)" id="gOverWhy">Mission over</span>
+    <h3 id="gOverT" class="silver">Rapid unscheduled disassembly</h3>
+    <div class="big" id="gOverScore">0</div>
+    <p id="gOverBest">Best 0</p>
+    <div class="row"><button class="btn solid" type="button" id="gAgain">Fly again <kbd>Space</kbd></button><button class="btn" type="button" id="gQuit">Back to the page</button></div>
+  </div>
+</div>
 
 <footer><div class="wrap"><span id="footName"></span><span>Numbers on this page are labeled designed, simulated, estimated, tested, or planned. Moon map: NASA LRO.</span></div></footer>
 
@@ -413,7 +474,8 @@ $("navlist").innerHTML = NAV.map(([id, t]) => `<li><a href="#${id}">${esc(t)}</a
 $("navResume").href = SITE.resumeUrl;
 $("footName").textContent = SITE.name + " · Irvine, California";
 
-$("stepA").innerHTML = `<span class="mono eyebrow">${esc(SITE.eyebrow)}</span><h1 class="silver">${esc(SITE.headline)}</h1><p class="lede">${SITE.lede}</p>
+$("stepA").innerHTML = `${SITE.status ? `<span class="avail mono"><i></i>${esc(SITE.status)}</span>` : ""}
+  <div class="idrow">${ABOUT.photo ? `<img class="hshot" src="${esc(ABOUT.photo)}" alt="" width="84" height="84">` : ""}<div><span class="mono eyebrow">${esc(SITE.eyebrow)}</span><h1 class="silver">${esc(SITE.headline)}</h1></div></div><p class="lede">${SITE.lede}</p>
   <div class="cta"><a class="btn solid" href="#projects">See the work</a><a class="btn" href="${esc(SITE.resumeUrl)}">Resume (PDF)</a><a class="btn" href="#contact">Contact</a></div>`;
 $("stepB").innerHTML = `<h2 class="silver">${esc(SITE.secondHeadline)}</h2><p class="lede">${SITE.secondLede}</p>
   <div class="now"><span class="mono">Currently</span><p>${esc(SITE.now)}</p></div>`;
@@ -423,7 +485,7 @@ $("railRocket").innerHTML = rocketSVG("r");
 /* Projects */
 function cover(p, i) {
   const first = (p.images || []).find(m => m.src);
-  if (first) return `<div class="cover"><img src="${esc(first.src)}" alt="" loading="lazy"></div>`;
+  if (first) return `<div class="cover"><img src="${esc(first.src)}" alt="" loading="lazy">${first.credit ? `<span class="credit mono">${esc(first.credit)}</span>` : ""}</div>`;
   return `<div class="cover blank"><span class="crosshair"></span><span class="mono note">Photos and drawings coming</span><span class="idx silver">${two(i + 1)}</span></div>`;
 }
 function pcard(p, i) {
@@ -648,50 +710,81 @@ lightbox.addEventListener("click", e => { if (e.target === lightbox) lightbox.cl
   const stepA = $("stepA"), stepB = $("stepB");
   const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
   const bez = (a, b, c, t) => (1 - t) * (1 - t) * a + 2 * (1 - t) * t * b + t * t * c;
-  let W = 0, H = 0, p = 0, last = 0, vel = 0, visible = true, raf = 0, t0 = performance.now();
+  const bezd = (a, b, c, t) => 2 * (1 - t) * (b - a) + 2 * t * (c - b);
+  /* p is the raw scroll position, ps is a smoothed copy that eases toward it,
+     so a mouse-wheel jump becomes a glide instead of a teleport. */
+  let W = 0, H = 0, p = 0, ps = 0, vel = 0, visible = true, raf = 0, t0 = performance.now(), prev = t0, rw = 92;
   const v3 = new THREE.Vector3();
+  const TRANSFER = 0.48, ORBIT_END = 0.95;
 
-  function size() { W = stage.clientWidth; H = stage.clientHeight; renderer.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix(); }
+  function size() { W = stage.clientWidth; H = stage.clientHeight; renderer.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix(); rw = rocketEl.offsetWidth || 92; }
   function progress() { const r = hero.getBoundingClientRect(), span = Math.max(1, hero.offsetHeight - stage.offsetHeight); p = reduce ? 0 : Math.min(1, Math.max(0, -r.top / span)); }
   function frame(now) {
     raf = 0;
-    const wide = W > 900, t = reduce ? 0 : (now - t0) / 1000;
-    const a = 2.25 - p * 2.05;                                      // crescent at the top, nearly full on arrival
+    const dt = Math.min(0.05, Math.max(0.001, (now - prev) / 1000)); prev = now;
+    const before = ps;
+    ps += (p - ps) * (1 - Math.exp(-dt * 7));
+    if (Math.abs(p - ps) < 0.0003) ps = p;
+    vel += (Math.abs(ps - before) / dt - vel) * Math.min(1, dt * 6);
+    const P = ps, wide = W > 900, t = reduce ? 0 : (now - t0) / 1000;
+
+    const a = 2.25 - P * 2.05;                                      // crescent at the top, nearly full on arrival
     sun.position.set(Math.sin(a) * 8, 1.4, Math.cos(a) * 8);
-    moon.rotation.y = -Math.PI / 2 + 0.35 + p * 0.5 + t * 0.008;    // near side toward us, drifting slowly
+    moon.rotation.y = -Math.PI / 2 + 0.35 + P * 0.5 + t * 0.008;    // near side toward us, drifting slowly
     moon.position.set(wide ? 1.45 : 0, wide ? 0.12 : 1.28, 0);
-    cam.position.set(0, 0, (wide ? 5.6 : 9.4) - p * (wide ? 1.0 : 1.3));
+    cam.position.set(0, 0, (wide ? 5.6 : 9.4) - P * (wide ? 0.75 : 1.3));
     cam.lookAt(wide ? 0.2 : 0, 0, 0);
     starA.rotation.y = t * 0.004; starB.rotation.y = t * 0.004;
     renderer.render(scene, cam);
 
-    /* Rocket: launches from low in the frame and arcs into the Moon's lit limb. */
+    /* Rocket: a transfer arc from low in the frame into a tilted lunar orbit,
+       then around the Moon until it slips behind the far limb. */
     v3.copy(moon.position).project(cam);
     const mx = (v3.x + 1) / 2 * W, my = (1 - v3.y) / 2 * H;
     const mr = (1 / cam.position.distanceTo(moon.position)) / Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * H / 2;
-    const q = ss(0.02, 0.86, p);
-    const sx = wide ? W * 0.5 : W * 0.84, sy = wide ? H - 128 : H * 0.44;
-    const ex = mx - mr * (wide ? 0.62 : -0.55), ey = my + mr * (wide ? 0.62 : 0.66);
-    const cx = wide ? W * 0.47 : W * 0.97, cy = wide ? H * 0.42 : H * 0.36;
-    const x = bez(sx, cx, ex, q), y = bez(sy, cy, ey, q);
-    const dx = bez(sx, cx, ex, Math.min(1, q + 0.01)) - x, dy = bez(sy, cy, ey, Math.min(1, q + 0.01)) - y;
-    const ang = q < 0.002 ? -Math.PI / 2 + 0.25 : Math.atan2(dy, dx);
-    const sc = 1 - q * 0.72, bob = q < 0.002 ? Math.sin(t * 1.6) * 3 : 0;
-    const rw = rocketEl.offsetWidth, rh = rw * 30 / 130;
-    rocketEl.style.transform = `translate(${x - rw / 2}px, ${y - rh / 2 + bob}px) rotate(${ang}rad) scale(${sc})`;
-    rocketEl.style.opacity = 1 - ss(0.84, 0.95, p);
-    vel += ((Math.abs(p - last) * 60) - vel) * 0.15; last = p;
-    const burn = q > 0.002 && q < 0.995 ? Math.min(1.6, 0.55 + vel * 9 + Math.sin(t * 40) * 0.06) : 0;
+    const tilt = wide ? -0.3 : 0.3, ct = Math.cos(tilt), st = Math.sin(tilt);
+    const rx = Math.max(mr * 1.1, Math.min(mr * (wide ? 1.2 : 1.16), W - mx - 30)), ry = mr * 0.32;
+    const orb = th => [mx + rx * Math.cos(th) * ct - ry * Math.sin(th) * st, my + rx * Math.cos(th) * st + ry * Math.sin(th) * ct];
+    const orbD = th => [-rx * Math.sin(th) * ct - ry * Math.cos(th) * st, -rx * Math.sin(th) * st + ry * Math.cos(th) * ct];
+    /* Enter on the right side of the orbit climbing upward, pass behind the Moon,
+       come back around the left side and across the near face, then fade out. */
+    const th0 = 0.35, dir = -1, SWEEP = Math.PI * 2 - 0.3;
+    const E = orb(th0), Ed = orbD(th0), el = Math.hypot(Ed[0], Ed[1]) || 1;
+    const Tx = dir * Ed[0] / el, Ty = dir * Ed[1] / el;
+    const sx = wide ? Math.min(W - 150, mx + mr * 0.55) : W * 0.82, sy = wide ? H - 96 : H * 0.46;
+    const L = Math.hypot(E[0] - sx, E[1] - sy) * 0.5;
+    const cx = E[0] - Tx * L, cy = E[1] - Ty * L;                    // control point keeps the arc tangent to the orbit
+    let x, y, tx, ty, sc, burn = 0, alpha = 1, bob = 0, q;
+    if (P < TRANSFER) {
+      const s = Math.min(1, Math.max(0, (P - 0.02) / (TRANSFER - 0.02)));
+      q = s * s * (2 - s);                                          // eases in from the pad, still moving at orbit entry
+      x = bez(sx, cx, E[0], q); y = bez(sy, cy, E[1], q);
+      tx = bezd(sx, cx, E[0], q); ty = bezd(sy, cy, E[1], q);
+      sc = 1 - q * 0.68;
+      if (q < 0.001) bob = Math.sin(t * 1.6) * 3;
+      else burn = Math.min(1.6, 0.55 + Math.min(1, vel * 1.6) * 0.9 + Math.sin(t * 40) * 0.05);
+    } else {
+      q = 1;
+      const o = Math.min(1, (P - TRANSFER) / (ORBIT_END - TRANSFER)), th = th0 + dir * o * SWEEP;
+      [x, y] = orb(th); const d = orbD(th); tx = d[0] * dir; ty = d[1] * dir;
+      const depth = Math.sin(th);                                   // positive: near side, negative: far side
+      sc = 0.32 + 0.05 * (depth - Math.sin(th0));
+      if (depth < 0) { const dist = Math.hypot(x - mx, y - my); alpha = Math.min(1, Math.max(0, (dist - mr * 0.92) / (mr * 0.1))); }
+      alpha *= 1 - ss(0.9, 0.97, P);
+    }
+    const ang = Math.atan2(ty, tx);
+    rocketEl.style.transform = `translate(${(x - rw / 2).toFixed(2)}px, ${(y - rw * 15 / 130 + bob).toFixed(2)}px) rotate(${ang.toFixed(4)}rad) scale(${sc.toFixed(4)})`;
+    rocketEl.style.opacity = alpha.toFixed(3);
     flame.setAttribute("transform", `translate(30 15) scale(${burn.toFixed(3)} 1)`);
     const km = Math.round(384400 * (1 - q));
     telV.textContent = km <= 0 ? "Arrived" : km.toLocaleString("en-US") + " km";
     telL.textContent = km <= 0 ? "Lunar orbit" : "Distance to the Moon";
 
     if (!reduce) {
-      const oa = 1 - ss(0.26, 0.44, p), ob = ss(0.48, 0.66, p);
+      const oa = 1 - ss(0.26, 0.44, P), ob = ss(0.48, 0.66, P);
       stepA.style.opacity = oa; stepA.style.transform = `translateY(${-(1 - oa) * 24}px)`; stepA.style.pointerEvents = oa > 0.5 ? "auto" : "none";
       stepB.style.opacity = ob; stepB.style.transform = `translateY(${(1 - ob) * 24}px)`; stepB.style.pointerEvents = ob > 0.5 ? "auto" : "none";
-      cue.style.opacity = 1 - ss(0, 0.08, p);
+      cue.style.opacity = 1 - ss(0, 0.08, P);
       if (visible) raf = requestAnimationFrame(frame);
     }
   }
@@ -701,6 +794,251 @@ lightbox.addEventListener("click", e => { if (e.target === lightbox) lightbox.cl
   addEventListener("scroll", kick, { passive: true });
   if ("IntersectionObserver" in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(hero);
   canvas.addEventListener("webglcontextlost", e => { e.preventDefault(); fallback(); });
+})();
+
+/* ---------------- Side starfield ----------------
+   Three layers of stars drift at different speeds as you scroll (parallax).
+   They sit mostly in the side margins and fade behind the text column.
+   Every so often a shooting star crosses one side. Respects reduced motion. */
+(function () {
+  const c = $("sky"); if (!c || !c.getContext) return;
+  const g = c.getContext("2d");
+  const LAYERS = [{ k: 0.05, s: [0.5, 0.9], a: 0.45 }, { k: 0.12, s: [0.7, 1.2], a: 0.65 }, { k: 0.24, s: [1.0, 1.7], a: 0.9 }];
+  let W = 0, H = 0, dpr = 1, stars = [], shots = [], next = 0, lastY = scrollY, v = 0, prev = performance.now(), colL = 0, colR = 0, raf = 0;
+  function build() {
+    dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+    c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const colW = Math.min(1120, W) - 48; colL = (W - colW) / 2; colR = W - colL;
+    const n = Math.round(Math.min(420, W * H / 5200));
+    stars = [];
+    for (let i = 0; i < n; i++) {
+      const L = LAYERS[i % 3], x = Math.random() * W;
+      const inCol = x > colL && x < colR;
+      if (inCol && Math.random() < 0.6) { i--; if (stars.length > n * 3) break; continue; }   // thin them out behind the text
+      stars.push({ x, y: Math.random() * H * 1.2, r: L.s[0] + Math.random() * (L.s[1] - L.s[0]), L, ph: Math.random() * 6.28, f: 0.6 + Math.random() * 1.6,
+        tint: Math.random() < 0.12 ? "200,215,255" : Math.random() < 0.08 ? "255,228,200" : "255,255,255" });
+    }
+  }
+  /* Brightness by position: full in the margins, dim behind the content column. */
+  function side(x) {
+    if (W < 900) return 0.38;
+    const d = x < colL ? colL - x : x > colR ? x - colR : -Math.min(x - colL, colR - x);
+    return d > 0 ? 1 : Math.max(0.14, 1 + d / 60);
+  }
+  function spawn(now) {
+    const left = Math.random() < 0.5, wideSides = W >= 900 && colL > 70;
+    const x = wideSides ? (left ? Math.random() * colL * 0.9 : colR + Math.random() * (W - colR) * 0.9) : Math.random() * W;
+    const ang = (left ? 0.45 : Math.PI - 0.45) + (Math.random() - 0.5) * 0.35;
+    shots.push({ x, y: Math.random() * H * 0.55, ang, len: 90 + Math.random() * 120, sp: 520 + Math.random() * 380, t: now, life: 900 + Math.random() * 500 });
+    next = now + 5000 + Math.random() * 8000;
+  }
+  function draw(now) {
+    raf = 0;
+    const dt = Math.min(0.05, (now - prev) / 1000) || 0.016; prev = now;
+    const y = reduce ? 0 : scrollY, dy = y - lastY; lastY = y;
+    v += (dy / Math.max(dt, 0.001) - v) * Math.min(1, dt * 10);
+    const t = now / 1000, span = H * 1.2;
+    g.clearRect(0, 0, W, H);
+    for (const s of stars) {
+      let sy = (s.y - y * s.L.k) % span; if (sy < 0) sy += span; sy -= H * 0.1;
+      if (sy < -4 || sy > H + 4) continue;
+      const tw = reduce ? 1 : 0.72 + 0.28 * Math.sin(t * s.f + s.ph);
+      const al = s.L.a * tw * side(s.x);
+      if (al < 0.02) continue;
+      const streak = reduce ? 0 : Math.min(16, Math.abs(v) * s.L.k * 0.02);
+      g.fillStyle = `rgba(${s.tint},${al.toFixed(3)})`;
+      if (streak > 1.2) { g.fillRect(s.x - s.r / 2, sy - (v > 0 ? 0 : streak), s.r, streak + s.r); }
+      else { g.beginPath(); g.arc(s.x, sy, s.r, 0, 6.2832); g.fill(); }
+    }
+    if (!reduce) {
+      if (!next) next = now + 2500 + Math.random() * 3000;
+      if (now > next && !document.hidden) spawn(now);
+      shots = shots.filter(sh => now - sh.t < sh.life);
+      for (const sh of shots) {
+        const k = (now - sh.t) / sh.life, d = sh.sp * (now - sh.t) / 1000;
+        const hx = sh.x + Math.cos(sh.ang) * d, hy = sh.y + Math.sin(sh.ang) * d;
+        const tl = sh.len * Math.min(1, k * 3), tx = hx - Math.cos(sh.ang) * tl, ty = hy - Math.sin(sh.ang) * tl;
+        const fade = k < 0.15 ? k / 0.15 : 1 - (k - 0.15) / 0.85, al = 0.85 * fade * side(hx);
+        const gr = g.createLinearGradient(hx, hy, tx, ty);
+        gr.addColorStop(0, `rgba(255,255,255,${al.toFixed(3)})`); gr.addColorStop(1, "rgba(255,255,255,0)");
+        g.strokeStyle = gr; g.lineWidth = 1.4; g.lineCap = "round";
+        g.beginPath(); g.moveTo(hx, hy); g.lineTo(tx, ty); g.stroke();
+      }
+      raf = requestAnimationFrame(draw);
+    }
+  }
+  build(); draw(performance.now());
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { build(); if (reduce) draw(performance.now()); }, 120); });
+})();
+
+/* ---------------- Rocket game (desktop only) ----------------
+   Press the button or G. Steer with arrow keys or A and D, boost with up or W.
+   Collect glowing cells across the whole page. Every cell makes your trail longer.
+   Hitting your trail or the edge of the page ends the run. Esc quits. */
+(function () {
+  const btn = $("playBtn"), c = $("game"); if (!btn || !c) return;
+  if (SITE.game === false) { btn.remove(); return; }
+  const ok = () => matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)").matches;
+  const g = c.getContext("2d"), root = document.documentElement;
+  const hud = $("gScore"), bestEl = $("gBest"), toast = $("gToast"), over = $("gOver");
+  let on = false, dead = false, raf = 0, prev = 0, W = 0, H = 0, docH = 0, dpr = 1;
+  let r, trail, cells, score, best = 0, keys = {}, sections = [], parts = [], tTimer = 0, camY = 0, grace = 0, lastSec = "";
+  try { best = +localStorage.getItem("lf-rocket-best") || 0; } catch (e) {}
+
+  function measure() {
+    dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+    c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    docH = Math.max(root.scrollHeight, document.body.scrollHeight);
+    const list = [["hero", "Launch pad"]].concat(NAV);
+    sections = list.map(([id, label]) => { const el = $(id); if (!el) return null; const b = el.getBoundingClientRect(); return { top: b.top + scrollY, bot: b.bottom + scrollY, label }; }).filter(Boolean);
+  }
+  const where = y => { for (const s of sections) if (y >= s.top && y < s.bot) return s.label; return y < 400 ? "Launch pad" : "Home orbit"; };
+  function cell(near) {
+    const span = near ? 1400 : docH;
+    let x, y, tries = 0;
+    do {
+      x = 40 + Math.random() * (W - 80);
+      y = near ? r.y + (Math.random() * 2 - 1) * span : 120 + Math.random() * (docH - 220);
+      y = Math.min(docH - 60, Math.max(110, y));
+      tries++;
+    } while (tries < 20 && Math.hypot(x - r.x, y - r.y) < 220);
+    return { x, y, gold: Math.random() < 0.1, ph: Math.random() * 6.28 };
+  }
+  function reset() {
+    measure();
+    r = { x: W / 2, y: scrollY + H * 0.62, a: -Math.PI / 2, v: 250 };
+    trail = []; parts = []; score = 0; dead = false; grace = 1.6; camY = scrollY;
+    cells = []; const n = Math.max(24, Math.round(docH / 260));
+    for (let i = 0; i < n; i++) cells.push(cell(false));
+    for (let i = 0; i < 6; i++) cells.push(cell(true));
+    hud.textContent = "0"; bestEl.textContent = "Best " + best; over.classList.remove("on"); lastSec = "";
+  }
+  function say(t) { toast.textContent = t; toast.classList.add("on"); clearTimeout(tTimer); tTimer = setTimeout(() => toast.classList.remove("on"), 1300); }
+  function start() {
+    if (on || !ok()) return;
+    on = true; root.classList.add("gaming"); root.style.scrollBehavior = "auto";
+    reset(); say("Collect the cells. Don't hit your trail.");
+    prev = performance.now(); raf = requestAnimationFrame(loop);
+  }
+  function stop() {
+    on = false; dead = false; cancelAnimationFrame(raf); raf = 0;
+    root.classList.remove("gaming"); root.style.scrollBehavior = ""; over.classList.remove("on"); toast.classList.remove("on");
+    g.clearRect(0, 0, W, H); btn.focus({ preventScroll: true });
+  }
+  function crash(why) {
+    if (dead) return; dead = true;
+    for (let i = 0; i < 46; i++) { const a = Math.random() * 6.283, s = 60 + Math.random() * 280; parts.push({ x: r.x, y: r.y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 0.6 + Math.random() * 0.7, t: 0, hot: Math.random() < 0.5 }); }
+    if (score > best) { best = score; try { localStorage.setItem("lf-rocket-best", String(best)); } catch (e) {} }
+    $("gOverWhy").textContent = why;
+    $("gOverScore").textContent = score;
+    $("gOverBest").textContent = score >= best && score > 0 ? "New best!" : "Best " + best;
+    setTimeout(() => { if (on && dead) { over.classList.add("on"); $("gAgain").focus({ preventScroll: true }); } }, 650);
+  }
+  function step(dt) {
+    if (grace > 0) grace -= dt;
+    if (!dead) {
+      const turn = (keys.ArrowLeft || keys.a ? -1 : 0) + (keys.ArrowRight || keys.d ? 1 : 0);
+      const boost = keys.ArrowUp || keys.w;
+      r.a += turn * 3.4 * dt;
+      const sp = Math.min(470, 250 + score * 2.2) * (boost ? 1.55 : 1);
+      r.v += (sp - r.v) * Math.min(1, dt * 5); r.boost = boost;
+      r.x += Math.cos(r.a) * r.v * dt; r.y += Math.sin(r.a) * r.v * dt;
+      const last = trail[trail.length - 1];
+      if (!last || Math.hypot(r.x - last.x, r.y - last.y) > 7) trail.push({ x: r.x, y: r.y });
+      const maxLen = 28 + Math.floor(score / 10) * 7;
+      while (trail.length > maxLen) trail.shift();
+      if (grace <= 0) {
+        if (r.x < 6 || r.x > W - 6 || r.y < 64 || r.y > docH - 6) crash("Left the page");
+        else for (let i = 0; i < trail.length - 16; i++) { const p = trail[i]; if (Math.hypot(p.x - r.x, p.y - r.y) < 6) { crash("Crossed your own trail"); break; } }
+      }
+      for (let i = cells.length - 1; i >= 0; i--) {
+        const k = cells[i];
+        if (Math.hypot(k.x - r.x, k.y - r.y) < 20) {
+          const pts = k.gold ? 50 : 10; score += pts; hud.textContent = score;
+          for (let j = 0; j < 14; j++) { const a = Math.random() * 6.283, s = 40 + Math.random() * 120; parts.push({ x: k.x, y: k.y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 0.5, t: 0, gold: k.gold }); }
+          const sec = where(k.y); say(`+${pts}  ·  ${sec}`); lastSec = sec;
+          cells.splice(i, 1); cells.push(cell(true));
+        }
+      }
+      /* Keep a handful of cells near the rocket so there is always something to chase. */
+      if (cells.filter(k => Math.abs(k.y - r.y) < H).length < 4) cells.push(cell(true));
+    }
+    for (const p of parts) { p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= 0.96; p.vy *= 0.96; }
+    parts = parts.filter(p => p.t < p.life);
+    const target = Math.min(Math.max(0, docH - H), Math.max(0, r.y - H * 0.5));
+    camY += (target - camY) * Math.min(1, dt * 4);
+    scrollTo(0, camY);
+  }
+  function rocket(x, y, a, boost, t) {
+    g.save(); g.translate(x, y); g.rotate(a); g.scale(1.4, 1.4);
+    if (!dead) {
+      const fl = (boost ? 26 : 14) + Math.sin(t * 50) * 3;
+      const fg = g.createLinearGradient(-8, 0, -8 - fl, 0); fg.addColorStop(0, "rgba(255,235,190,0.95)"); fg.addColorStop(0.4, "rgba(255,150,60,0.8)"); fg.addColorStop(1, "rgba(255,90,30,0)");
+      g.fillStyle = fg; g.beginPath(); g.moveTo(-8, -3.4); g.quadraticCurveTo(-8 - fl * 0.5, -2, -8 - fl, 0); g.quadraticCurveTo(-8 - fl * 0.5, 2, -8, 3.4); g.fill();
+    }
+    g.shadowColor = "rgba(0,0,0,0.9)"; g.shadowBlur = 6;
+    g.fillStyle = "#aeb3ba"; g.beginPath(); g.moveTo(-8, -3.5); g.lineTo(-14, -9); g.lineTo(-3, -3.5); g.moveTo(-8, 3.5); g.lineTo(-14, 9); g.lineTo(-3, 3.5); g.fill();
+    const bg = g.createLinearGradient(0, -4, 0, 4); bg.addColorStop(0, "#f6f7f9"); bg.addColorStop(1, "#b9bdc4");
+    g.fillStyle = bg; g.beginPath(); g.moveTo(-9, -4); g.lineTo(8, -4); g.quadraticCurveTo(15, -3, 19, 0); g.quadraticCurveTo(15, 3, 8, 4); g.lineTo(-9, 4); g.closePath(); g.fill();
+    g.shadowBlur = 0; g.fillStyle = "#1b1e24"; g.beginPath(); g.arc(5, 0, 1.6, 0, 6.283); g.fill();
+    g.restore();
+  }
+  function draw(t) {
+    g.clearRect(0, 0, W, H);
+    const oy = scrollY;
+    /* Page edges glow red as you get close. */
+    const near = Math.min(r.x, W - r.x);
+    if (near < 120 && !dead) { const al = (1 - near / 120) * 0.35, left = r.x < W / 2; const eg = g.createLinearGradient(left ? 0 : W, 0, left ? 60 : W - 60, 0); eg.addColorStop(0, `rgba(255,80,80,${al})`); eg.addColorStop(1, "rgba(255,80,80,0)"); g.fillStyle = eg; g.fillRect(left ? 0 : W - 60, 0, 60, H); }
+    for (const k of cells) {
+      const y = k.y - oy; if (y < -30 || y > H + 30) continue;
+      const pu = 1 + Math.sin(t * 3 + k.ph) * 0.18, col = k.gold ? "255,210,120" : "170,220,255", s = (k.gold ? 9 : 6.5) * pu;
+      const gl = g.createRadialGradient(k.x, y, 0, k.x, y, s * 3.2); gl.addColorStop(0, `rgba(${col},0.55)`); gl.addColorStop(1, `rgba(${col},0)`);
+      g.fillStyle = gl; g.beginPath(); g.arc(k.x, y, s * 3.2, 0, 6.283); g.fill();
+      g.save(); g.translate(k.x, y); g.rotate(t * 1.2 + k.ph); g.fillStyle = `rgba(${col},1)`; g.beginPath(); g.moveTo(0, -s); g.lineTo(s * 0.62, 0); g.lineTo(0, s); g.lineTo(-s * 0.62, 0); g.closePath(); g.fill(); g.restore();
+    }
+    /* Off-screen arrow toward the nearest cell. */
+    if (!dead) {
+      let best = null, bd = 1e9; for (const k of cells) { const d = Math.hypot(k.x - r.x, k.y - r.y); if (d < bd) { bd = d; best = k; } }
+      if (best && (best.y - oy < 70 || best.y - oy > H - 10)) {
+        const up = best.y - oy < 70, ax = Math.min(W - 30, Math.max(30, best.x)), ay = up ? 82 : H - 22;
+        g.fillStyle = "rgba(170,220,255,0.8)"; g.beginPath(); if (up) { g.moveTo(ax, ay - 8); g.lineTo(ax - 7, ay + 4); g.lineTo(ax + 7, ay + 4); } else { g.moveTo(ax, ay + 8); g.lineTo(ax - 7, ay - 4); g.lineTo(ax + 7, ay - 4); } g.fill();
+      }
+    }
+    if (trail.length > 1) {
+      g.lineCap = "round"; g.lineJoin = "round";
+      for (let i = 1; i < trail.length; i++) {
+        const f = i / trail.length, a = trail[i - 1], b = trail[i];
+        g.strokeStyle = `rgba(220,226,235,${(0.08 + f * 0.6).toFixed(3)})`; g.lineWidth = 1 + f * 3.4;
+        g.beginPath(); g.moveTo(a.x, a.y - oy); g.lineTo(b.x, b.y - oy); g.stroke();
+      }
+    }
+    for (const p of parts) { const f = 1 - p.t / p.life; g.fillStyle = p.gold ? `rgba(255,210,120,${f})` : p.hot ? `rgba(255,${120 + Math.round(f * 100)},60,${f})` : `rgba(230,232,236,${f})`; g.fillRect(p.x - 1.5, p.y - oy - 1.5, 3, 3); }
+    if (!dead && (grace <= 0 || Math.floor(t * 10) % 2 === 0)) rocket(r.x, r.y - oy, r.a, r.boost, t);
+  }
+  function loop(now) {
+    if (!on) return;
+    let dt = Math.min(0.12, (now - prev) / 1000); prev = now;
+    while (dt > 0) { const s = Math.min(0.02, dt); step(s); dt -= s; }   // fixed small steps: same speed on slow and fast screens
+    draw(now / 1000);
+    raf = requestAnimationFrame(loop);
+  }
+  const GAME_KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", " ", "a", "d", "w", "s", "PageUp", "PageDown", "Home", "End"];
+  addEventListener("keydown", e => {
+    const tag = (e.target && e.target.tagName) || "";
+    if (!on) { if ((e.key === "g" || e.key === "G") && !e.metaKey && !e.ctrlKey && !e.altKey && !/INPUT|TEXTAREA|SELECT/.test(tag) && !document.querySelector("dialog[open]")) { e.preventDefault(); start(); } return; }
+    if (e.key === "Escape") { e.preventDefault(); stop(); return; }
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (GAME_KEYS.includes(k)) e.preventDefault();
+    if (dead && (k === " " || k === "Enter") && over.classList.contains("on")) { reset(); return; }
+    keys[k] = true;
+  });
+  addEventListener("keyup", e => { const k = e.key.length === 1 ? e.key.toLowerCase() : e.key; keys[k] = false; });
+  addEventListener("blur", () => { keys = {}; });
+  addEventListener("wheel", e => { if (on) e.preventDefault(); }, { passive: false });
+  addEventListener("resize", () => { if (on) { if (!ok()) stop(); else measure(); } });
+  btn.addEventListener("click", start);
+  $("gAgain").addEventListener("click", reset);
+  $("gQuit").addEventListener("click", stop);
 })();
 
 /* ---------------- The little Earth ---------------- */
