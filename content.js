@@ -22,7 +22,7 @@ const SITE = {
   name: "Laurenz Felix",
   eyebrow: "Chemical Engineering · UC Irvine · Class of 2028",
   headline: "Laurenz Felix",
-  lede: "I study <b>chemical engineering and materials science</b> at UC Irvine, and I use that side of things to design, build, and test <b>space hardware</b>.",
+  lede: "I study <b>chemical engineering and materials science</b> at UC Irvine, and I'm working toward a career in <b>space</b>.",
   secondHeadline: "Chemistry first. Then hardware.",
   secondLede: "I research the chemistry behind chipmaking, and I build <b>thrusters, rockets, and the rigs to test them</b>. The question I keep asking is what a part is made of and why.",
   now: "Finished my PFAS research paper and presenting it Nov 23, working through the valve trade study for our CubeSat thruster, and assembling my Level 1 rocket.",
