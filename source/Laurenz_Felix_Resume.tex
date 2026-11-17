@@ -1,0 +1,114 @@
+\documentclass[letterpaper,11pt]{article}
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{amssymb}
+\input{glyphtounicode}
+\pagestyle{fancy}\fancyhf{}\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0pt}
+\addtolength{\oddsidemargin}{-0.5in}\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}\addtolength{\topmargin}{-.55in}\addtolength{\textheight}{1.1in}
+\urlstyle{same}\raggedbottom\raggedright\setlength{\tabcolsep}{0in}
+\titleformat{\section}{\vspace{-5pt}\scshape\raggedright\large}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+\pdfgentounicode=1
+\newcommand{\resumeItem}[1]{\item\small{{#1 \vspace{-2pt}}}}
+\newcommand{\resumeSubheading}[4]{\vspace{-2pt}\item
+  \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & #2 \\ \textit{\small#3} & \textit{\small #4} \\
+  \end{tabular*}\vspace{-7pt}}
+\newcommand{\resumeProjectHeading}[2]{\item
+  \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+    \small#1 & #2 \\
+  \end{tabular*}\vspace{-7pt}}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\begin{document}
+\begin{center}
+  \textbf{\Huge \scshape Laurenz David Felix} \\ \vspace{1pt}
+  \small Irvine, CA $|$ 916-667-1334 $|$ \href{mailto:laurenzf@uci.edu}{laurenzf@uci.edu} $|$
+  \href{https://www.linkedin.com/in/laurenzfelix/}{linkedin.com/in/laurenzfelix}
+\end{center}
+
+\section{Education}
+\resumeSubHeadingListStart
+  \resumeSubheading{University of California, Irvine}{Irvine, CA}
+    {B.S. Chemical Engineering (Energy \& Sustainability); Minor in Materials Science \& Engineering}{Expected June 2028}
+  \resumeItemListStart
+    \resumeItem{\textbf{Relevant Coursework:} General \& Organic Chemistry (with Labs), Physics, Multivariable Calculus}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Research Experience}
+\resumeSubHeadingListStart
+  \resumeSubheading{Irvine Hacker Fab}{Irvine, CA}{Semiconductor Fabrication Research Intern}{Oct 2026 -- Present}
+  \resumeItemListStart
+    \resumeItem{Selected as 1 of 20 students for a 1-quarter semiconductor fabrication internship led by a UCI professor}
+    \resumeItem{Wrote an 11-page literature review on replacing PFAS in photoresists, using Green Chemistry principles}
+    \resumeItem{Presenting findings in a 3-minute talk to industry professionals, UCI faculty, and graduate researchers (Nov 2026)}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Projects}
+\resumeSubHeadingListStart
+  \resumeProjectHeading{\textbf{Drag Sail Deorbit CubeSat} $|$ \emph{SEDS UCI, Propulsion Engineer}}{Oct 2026 -- Present}
+  \resumeItemListStart
+    \resumeItem{Co-designing a cold-gas thruster in CAD, using flow simulations to study nozzle expansion and efficiency}
+    \resumeItem{Own solenoid valve and pressure transducer selection for the nitrogen thruster assembly of a 12U CubeSat}
+    \resumeItem{Writing requirements and a preliminary trade study; simulating thrust levels from 50 mN to 1 N in SolidWorks}
+  \resumeItemListEnd
+  \resumeProjectHeading{\textbf{Thrust Vector Control (TVC) Rocket} $|$ \emph{Personal Project, In Design}}{Jun 2026 -- Present}
+  \resumeItemListStart
+    \resumeItem{Designing a rocket on Estes F15 motors with a 2-axis servo gimbal and IMU + PID controller, aiming to self-land}
+    \resumeItem{Simulated full-mass flight in OpenRocket; next step is a static-fire gimbal rig with a 50 mm EDF stand-in}
+  \resumeItemListEnd
+  \resumeProjectHeading{\textbf{EDF Flying Wing (GASB ONE)} $|$ \emph{Personal Project}}{Oct 2026 -- Present}
+  \resumeItemListStart
+    \resumeItem{Converting a 3D-printed GASB ONE from a prop to a 50 mm EDF, upsizing to a 40A ESC for its $\sim$38A draw}
+    \resumeItem{Designing a heat-resistant PA-CF EDF nacelle in SolidWorks; PETG airframe with carbon fiber spars}
+    \resumeItem{Wired an Arduino Nano flown by Xbox controller over radio (AI-assisted code); bench-tested IMU and radio}
+  \resumeItemListEnd
+  \resumeProjectHeading{\textbf{Level 1 High-Power Rocket} $|$ \emph{Zotckets at UCI}}{Sep 2026 -- Present}
+  \resumeItemListStart
+    \resumeItem{Designing a rocket for Level 1 (L1) certification on a 74 mm airframe, simulated to 974 m apogee at Mach 0.65}
+    \resumeItem{Designed the nose cone, fins, and centering rings in SolidWorks, plus a custom avionics bay to log launch data}
+  \resumeItemListEnd
+  \resumeProjectHeading{\textbf{Fire-Extinguishing Rover} $|$ \emph{FUSION Engineering Project, Mechanical Subteam}}{Jan 2026 -- Jun 2026}
+  \resumeItemListStart
+    \resumeItem{Co-designed the water delivery system (pump, two-axis gimbal, $\sim$400 mL gravity-fed tank) on a 16-person team}
+    \resumeItem{Proposed the two-axis gimbal based on camera stabilizers, hitting targets with $\sim$80\%+ accuracy, best of all teams}
+    \resumeItem{Fixed late leaks with sealed joints and a drip tray; upgraded burnt servos to metal-gear with new CAD housings}
+    \resumeItem{Finished the course in $\sim$2 min vs.\ 4 min for the next team, winning Best Overall and Sponsor's Choice}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Leadership Experience}
+\resumeSubHeadingListStart
+  \resumeSubheading{FUSION at UCI (Filipino STEM Organization)}{Irvine, CA}{External Vice President Intern}{Jan 2026 -- Jun 2026}
+  \resumeItemListStart
+    \resumeItem{Led outreach to Alyansa and cultural orgs, sharing FUSION's goals for Filipino engineering and ICS students}
+  \resumeItemListEnd
+  \resumeSubheading{ACEing Autism}{Irvine, CA}{External Outreach Manager}{Jan 2025 -- May 2026}
+  \resumeItemListStart
+    \resumeItem{Contacted 2+ organizations weekly across Orange County, building connections including Easterseals}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Skills, Licenses \& Training}
+\begin{itemize}[leftmargin=0.15in, label={}]
+  \small{\item{
+    \textbf{CAD \& Analysis}{: SolidWorks (Flow Simulation), Fusion 360, OpenRocket, MATLAB, Python, C++, Excel, GD\&T} \\
+    \textbf{Hardware}{: Arduino, Soldering, Breadboarding, Multimeter, 3D Printing (PETG, PA-CF), Shop Tools} \\
+    \textbf{Engineering}{: Trade Studies, Requirements, Material Selection, Technical Writing, Lab Safety, Google Workspace, Canva} \\
+    \textbf{License}{: Ham Radio Technician} $|$ \textbf{Training}{: Reactor Operator (Spring 2027)} $|$ \textbf{Orgs}{: SEDS, Zotckets, FUSION, AIChE}
+  }}
+\end{itemize}
+\end{document}

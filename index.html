@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laurenz Felix Portfolio</title>
+<meta name="description" content="Laurenz Felix. Chemical engineering student at UC Irvine who designs, builds, and tests space hardware.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout idea: one dark page that is a round trip. A rocket flies from the opening screen to a real
+   NASA-mapped Moon, a thin rail on the right tracks the trip home as you read, and a small cartoon
+   Earth with a pin on Irvine closes the page. Headlines are brushed silver; only photos, drawings,
+   and the Earth carry color. Every number carries a small mono tag saying how it was obtained.
+   Single dark theme on purpose. All words and images come from content.js. */
+:root {
+  --bg: #050608; --bg-2: #090b0f; --surface: #0e1116; --surface-2: #151922;
+  --ink: #eceef1; --muted: #8f949d; --faint: #5f646d; --line: #1c2029; --line-2: #2b303a;
+  --sheet: #ffffff;
+  --silver: linear-gradient(172deg, #ffffff 0%, #e4e6ea 34%, #b3b8c0 66%, #81868f 100%);
+  --silver-btn: linear-gradient(180deg, #f6f7f9 0%, #d3d6db 55%, #aeb3ba 100%);
+  --display: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, Consolas, monospace;
+  --w: 1120px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; background: var(--bg); }
+html.locked { overflow: hidden; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--display); font-size: 16.5px; line-height: 1.62; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-underline-offset: 3px; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid #dfe2e6; outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3, h4 { margin: 0; font-weight: 600; line-height: 1.08; letter-spacing: -0.03em; text-wrap: balance; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+.wrap { max-width: var(--w); margin-inline: auto; padding-inline: 24px; }
+.mono { font-family: var(--mono); font-size: 0.72rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; }
+.silver { background: var(--silver); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+.muted { color: var(--muted); }
+.error-banner { position: fixed; inset: 0 0 auto 0; z-index: 100; background: #3a1414; color: #ffdcdc; padding: 14px 20px; font-family: var(--mono); font-size: 0.85rem; }
+
+/* ---------- Nav ---------- */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 30; background: rgba(5,6,8,0.62); backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2); border-bottom: 1px solid rgba(255,255,255,0.06); }
+.nav .wrap { display: flex; align-items: center; gap: 18px; height: 58px; }
+.nav .name { font-weight: 600; text-decoration: none; white-space: nowrap; letter-spacing: -0.02em; }
+.nav nav { min-width: 0; margin-left: auto; }
+.nav ul { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.nav ul::-webkit-scrollbar { display: none; }
+.nav li a { display: block; padding: 7px 12px; border-radius: 999px; font-size: 0.88rem; text-decoration: none; color: var(--muted); white-space: nowrap; transition: color .2s, background .2s; }
+.nav li a:hover { color: var(--ink); }
+.nav li a[aria-current="true"] { color: var(--ink); background: rgba(255,255,255,0.08); }
+.nav .resume { flex: none; }
+
+/* ---------- Buttons, chips ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line-2); background: rgba(255,255,255,0.02); font-size: 0.93rem; font-weight: 500; text-decoration: none; cursor: pointer; transition: border-color .2s, background .2s, transform .2s; white-space: nowrap; }
+.btn:hover { border-color: #4a505c; background: rgba(255,255,255,0.05); }
+.btn.solid { background: var(--silver-btn); color: #0b0c0f; border-color: transparent; box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 8px 24px rgba(200,205,215,0.12); }
+.btn.solid:hover { transform: translateY(-1px); }
+.btn.sm { padding: 7px 14px; font-size: 0.85rem; }
+.pill { display: inline-flex; align-items: center; gap: 8px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line-2); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); justify-self: start; max-width: 100%; line-height: 1.35; }
+.pill::before { flex: none; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill.done { color: var(--ink); }
+.pill.live::before { animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.25; } }
+.kind { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-2); padding: 1px 6px; border-radius: 4px; white-space: nowrap; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; background: #000; }
+.stage { position: relative; height: min(100vh, 940px); min-height: 600px; display: grid; align-items: end; overflow: hidden; }
+.motion .hero { height: min(210vh, 1900px); }
+.motion .stage { position: sticky; top: 0; }
+#moon { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.moon-static { position: absolute; width: min(64vw, 440px); aspect-ratio: 1; right: max(6vw, 20px); top: 15%; border-radius: 50%;
+  background: radial-gradient(circle at 70% 40%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.85) 72%), url("images/moon-1k.jpg") 25% 50% / 200% 100%;
+  box-shadow: 0 0 80px rgba(220,225,235,0.06); }
+.stage-copy { position: relative; z-index: 3; width: 100%; padding-block: 110px 64px; display: grid; }
+.step { grid-area: 1 / 1; max-width: 600px; align-self: end; }
+.motion .step-b { opacity: 0; }
+.eyebrow { color: var(--muted); margin-bottom: 20px; display: block; }
+.hero h1 { font-size: clamp(2.6rem, 6.8vw, 5.2rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1.02; padding-bottom: 0.06em; }
+.hero h2 { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 600; letter-spacing: -0.04em; padding-bottom: 0.06em; }
+.hero .lede { margin-top: 22px; font-size: clamp(1.02rem, 1.6vw, 1.18rem); color: var(--muted); max-width: 50ch; }
+.hero .lede b { color: var(--ink); font-weight: 500; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.now { margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--line-2); display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; max-width: 620px; }
+.now .mono { color: var(--muted); }
+.now p { font-size: 0.97rem; flex: 1 1 280px; }
+.static .step-b { margin-top: 56px; grid-area: auto; }
+#rocket { position: absolute; left: 0; top: 0; z-index: 2; width: 92px; pointer-events: none; transform-origin: 50% 50%; filter: drop-shadow(0 0 10px rgba(255,255,255,0.18)); will-change: transform; }
+#rocket svg, .rail-rocket svg { display: block; width: 100%; height: auto; overflow: visible; }
+.telemetry { position: absolute; z-index: 3; right: 24px; bottom: 26px; text-align: right; display: grid; gap: 2px; color: var(--muted); }
+.telemetry b { font-family: var(--mono); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.cue { position: absolute; z-index: 3; left: 50%; bottom: 22px; transform: translateX(-50%); color: var(--faint); display: grid; justify-items: center; gap: 6px; }
+.cue::after { content: ""; width: 1px; height: 26px; background: linear-gradient(var(--faint), transparent); }
+.static .cue, .static .telemetry { display: none; }
+
+/* ---------- Flight rail ---------- */
+.rail { position: fixed; z-index: 25; right: 22px; top: 96px; bottom: 36px; width: 26px; display: none; opacity: 0; transition: opacity .4s; }
+.rail.on { opacity: 1; }
+.rail .track { position: absolute; left: 50%; top: 20px; bottom: 20px; width: 1px; background: linear-gradient(var(--line-2), var(--line-2)) no-repeat; }
+.rail .flown { position: absolute; left: 50%; top: 20px; width: 1px; background: linear-gradient(#e9ebee, #8c919a); height: 0; }
+.rail .body { position: absolute; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; }
+.rail .r-moon { top: 9px; width: 16px; height: 16px; background: radial-gradient(circle at 35% 35%, #f1f1ee, #9a9a97 60%, #4a4a48); }
+.rail .r-earth { bottom: -9px; width: 16px; height: 16px; transform: translate(-50%, 0); background: radial-gradient(circle at 35% 35%, #9fe0b0, #4f8fd8 55%, #1f4f8c); }
+.rail a.tick { position: absolute; left: 50%; width: 9px; height: 9px; transform: translate(-50%, -50%); border-radius: 50%; border: 1px solid var(--line-2); background: var(--bg); }
+.rail a.tick span { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); white-space: nowrap; color: var(--muted); opacity: 0; transition: opacity .2s; pointer-events: none; }
+.rail a.tick:hover span, .rail a.tick.passed:hover span { opacity: 1; }
+.rail a.tick.passed { background: #c9ccd2; border-color: #c9ccd2; }
+.rail-rocket { position: absolute; left: 50%; width: 38px; transform: translate(-50%, -50%) rotate(90deg); filter: drop-shadow(0 0 6px rgba(255,255,255,0.2)); }
+@media (min-width: 1240px) { .rail { display: block; } }
+
+/* ---------- Sections ---------- */
+section.band { padding-block: 112px; position: relative; }
+section.band + section.band { border-top: 1px solid var(--line); }
+.band-head { display: grid; gap: 12px; margin-bottom: 48px; max-width: 760px; }
+.band-head .mono { color: var(--muted); }
+.band-head h2 { font-size: clamp(1.9rem, 4.2vw, 3rem); padding-bottom: 0.06em; }
+.band-head p { color: var(--muted); max-width: 62ch; font-size: 1.02rem; }
+.sub-head { margin: 80px 0 24px; color: var(--muted); }
+.prose { display: grid; gap: 16px; max-width: 64ch; }
+
+/* Project cards */
+.pgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.pcard { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; transition: border-color .25s, transform .25s, background .25s; }
+.pcard:hover { border-color: var(--line-2); background: var(--surface-2); transform: translateY(-3px); }
+.cover { aspect-ratio: 4 / 3; background: #0a0c10; position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.pcard:hover .cover img { transform: scale(1.03); }
+.cover.blank { background-color: #080a0d; background-image: linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px); background-size: 22px 22px; background-position: -1px -1px; }
+.cover .idx { position: absolute; left: 20px; bottom: 14px; font-size: 4.6rem; font-weight: 600; letter-spacing: -0.06em; line-height: 1; }
+.cover .note { position: absolute; right: 16px; top: 14px; color: var(--faint); }
+.cover .crosshair { position: absolute; right: 22%; top: 36%; width: 64px; height: 64px; border: 1px solid rgba(255,255,255,0.12); border-radius: 50%; }
+.cover .crosshair::before, .cover .crosshair::after { content: ""; position: absolute; background: rgba(255,255,255,0.12); }
+.cover .crosshair::before { left: -14px; right: -14px; top: 50%; height: 1px; }
+.cover .crosshair::after { top: -14px; bottom: -14px; left: 50%; width: 1px; }
+.pbody { padding: 22px 22px 24px; display: grid; gap: 14px; align-content: start; }
+.pbody h3 { font-size: 1.32rem; letter-spacing: -0.025em; }
+.pbody .meta { color: var(--muted); font-size: 0.86rem; margin-top: 6px; line-height: 1.45; }
+.pbody .sum { color: #c4c8ce; font-size: 0.95rem; }
+.mstats { border-top: 1px solid var(--line); }
+.mstats li { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 0.86rem; }
+.mstats .v { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mstats .l { color: var(--muted); }
+.open { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.93rem; background: none; border: 0; padding: 4px 0 0; cursor: pointer; justify-self: start; }
+.open::after { content: ""; position: absolute; inset: 0; border-radius: 18px; }
+.open .arr { transition: transform .2s; }
+.pcard:hover .open .arr { transform: translateX(4px); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 18px; }
+.card { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 24px; display: grid; gap: 16px; align-content: start; }
+.card { grid-template-columns: minmax(0, 1fr); }
+.card figure { margin: 0; display: grid; gap: 8px; }
+.card h3 { font-size: 1.2rem; letter-spacing: -0.02em; }
+.card .meta { color: var(--muted); font-size: 0.86rem; margin-top: 5px; }
+.spec { border-top: 1px solid var(--line); }
+.spec li { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+.spec .k { color: var(--muted); }
+.spec .val { display: inline-flex; gap: 8px; align-items: baseline; font-variant-numeric: tabular-nums; text-align: right; }
+.cmedia { display: grid; gap: 8px; }
+.cmedia.n2 { grid-template-columns: 1fr 1fr; }
+.cmedia.n3 { grid-template-columns: 1fr 1fr 1fr; }
+.cmedia img { width: 100%; border-radius: 10px; border: 1px solid var(--line); }
+.cmedia .zoom:not(.paper) img { aspect-ratio: 4 / 3; object-fit: cover; }
+.cmedia.n2 .zoom:not(.paper) img, .cmedia.n3 .zoom:not(.paper) img { aspect-ratio: 3 / 4; }
+.cmedia.n2 figcaption, .cmedia.n3 figcaption { display: none; }
+.cmedia .paper img { border: 0; border-radius: 4px; }
+.agal { margin-top: 64px; display: grid; gap: 18px; }
+.agal h3 { color: var(--muted); }
+.agal figure { margin: 0; display: grid; gap: 8px; align-content: start; }
+.agal .grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; align-items: start; }
+.agal img { width: 100%; border-radius: 14px; border: 1px solid var(--line); object-fit: cover; aspect-ratio: 4 / 3; }
+.agal figure:not(:first-child) img { aspect-ratio: 3 / 4; }
+.agal figure:first-child img { aspect-ratio: auto; }
+.paper { background: var(--sheet); border-radius: 10px; padding: 10px; }
+.zoom { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; text-align: left; }
+
+/* Research */
+.research { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 56px; align-items: start; }
+.facts { display: grid; border-top: 1px solid var(--line); }
+.facts li { padding: 15px 0; border-bottom: 1px solid var(--line); display: grid; gap: 4px; }
+.facts .mono { color: var(--muted); }
+.findings { margin-top: 64px; max-width: 800px; display: grid; gap: 18px; }
+.findings h3 { color: var(--muted); }
+.findings ol { counter-reset: f; border-top: 1px solid var(--line); }
+.findings li { counter-increment: f; display: grid; grid-template-columns: 44px minmax(0, 1fr); padding: 15px 0; border-bottom: 1px solid var(--line); }
+.findings li::before { content: counter(f, decimal-leading-zero); font-family: var(--mono); font-size: 0.75rem; color: var(--faint); padding-top: 4px; }
+.findings .take { font-size: clamp(1.15rem, 2vw, 1.4rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.35; padding-top: 10px; }
+.figs { margin-top: 48px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.figs figure { margin: 0; display: grid; gap: 10px; align-content: start; }
+.figs figure.lead { grid-row: span 2; }
+figcaption, .cite { font-size: 0.83rem; color: var(--muted); }
+.cite { margin-top: 24px; max-width: 72ch; }
+
+/* About */
+.about { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 56px; align-items: start; }
+.about .photo { border-radius: 20px; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border: 1px solid var(--line); }
+.about .id { margin-top: 16px; display: grid; gap: 3px; font-size: 0.9rem; color: var(--muted); }
+.quotes { margin-top: 64px; display: grid; gap: 18px; }
+.quotes h3 { color: var(--muted); }
+.quotes ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.quotes li { border: 1px solid var(--line); border-radius: 18px; padding: 26px 24px; display: grid; gap: 14px; align-content: space-between; background: linear-gradient(180deg, var(--surface), var(--bg-2)); }
+.quotes q { font-size: clamp(1.2rem, 2vw, 1.45rem); font-weight: 500; letter-spacing: -0.025em; line-height: 1.25; quotes: "\201C" "\201D"; }
+.quotes .by { color: var(--faint); }
+
+/* Skills, leadership */
+.rows { border-top: 1px solid var(--line); }
+.rows li { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 8px 28px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.rows .mono { color: var(--muted); padding-top: 4px; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 18px; }
+
+/* Contact and Earth */
+.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 440px); gap: 48px; align-items: center; }
+.contact-grid { display: grid; border-top: 1px solid var(--line); }
+.contact-row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.contact-row .who { display: grid; gap: 3px; min-width: 0; }
+.contact-row .who .mono { color: var(--muted); }
+.contact-row .addr { font-size: 1.08rem; overflow-wrap: anywhere; }
+.contact-row .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.earth-box { position: relative; display: grid; justify-items: center; gap: 10px; }
+#earth { position: relative; width: 100%; max-width: 420px; aspect-ratio: 1; display: block; }
+.earth-box::before { content: ""; position: absolute; left: 50%; top: 0; width: min(100%, 420px); aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle, rgba(110,160,240,0.22) 0%, rgba(110,160,240,0.08) 38%, rgba(110,160,240,0) 62%); pointer-events: none; }
+.earth-static { width: 78%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 38% 34%, #b9f0c6 0%, #7cc98c 22%, #4f8fd8 48%, #2c5f9e 78%); box-shadow: 0 0 0 10px rgba(120,170,255,0.06); }
+.earth-box .tag { color: var(--muted); display: inline-flex; align-items: center; gap: 8px; }
+.earth-box .tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #ff6a5c; box-shadow: 0 0 0 3px rgba(255,106,92,0.2); }
+footer { border-top: 1px solid var(--line); padding-block: 28px 48px; color: var(--faint); font-size: 0.85rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+/* ---------- Project viewer ---------- */
+dialog { color: var(--ink); }
+dialog::backdrop { background: rgba(2,3,5,0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.viewer { width: min(1100px, calc(100% - 32px)); max-width: none; max-height: calc(100% - 32px); margin: auto; padding: 0; border: 1px solid var(--line-2); border-radius: 22px; background: var(--bg-2); overflow: auto; overscroll-behavior: contain; }
+.viewer[open] { animation: rise .32s cubic-bezier(.2,.8,.2,1); }
+@keyframes rise { from { opacity: 0; transform: translateY(18px) scale(0.985); } }
+.vbar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px 12px 28px; background: rgba(9,11,15,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.vbar .mono { color: var(--muted); }
+.x { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line-2); background: rgba(255,255,255,0.03); cursor: pointer; display: grid; place-items: center; font-size: 1.2rem; line-height: 1; flex: none; }
+.x:hover { background: rgba(255,255,255,0.08); }
+.vbody { padding: 36px 44px 56px; display: grid; gap: 44px; }
+.vhead { display: grid; gap: 14px; }
+.vhead h2 { font-size: clamp(1.8rem, 4vw, 2.9rem); padding-bottom: 0.06em; }
+.vhead .meta { color: var(--muted); }
+.vhead .sum { font-size: 1.08rem; max-width: 66ch; color: #c9cdd3; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-top: 1px solid var(--line); }
+.stat { padding: 18px 18px 18px 0; border-bottom: 1px solid var(--line); display: grid; gap: 6px; align-content: start; }
+.stat .v { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.stat .l { color: var(--muted); font-size: 0.88rem; }
+.gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.gallery figure { margin: 0; display: grid; gap: 8px; align-content: start; }
+.gallery figure:first-child:not(:only-child) { grid-column: span 2; grid-row: span 2; }
+.gallery img { width: 100%; border-radius: 12px; border: 1px solid var(--line); }
+.gallery figure:first-child:not(:only-child) img { aspect-ratio: 3 / 2; object-fit: cover; }
+.gallery .paper img { border: 0; border-radius: 4px; }
+.slot { aspect-ratio: 4 / 3; border: 1px dashed var(--line-2); border-radius: 12px; display: grid; place-items: center; text-align: center; padding: 14px; color: var(--faint); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; }
+a.slot { text-decoration: none; color: var(--ink); border-style: solid; gap: 8px; }
+a.slot:hover { background: rgba(255,255,255,0.04); }
+.vsec { display: grid; gap: 14px; max-width: 72ch; }
+.vsec h4, .vlabel { font-family: var(--mono); font-size: 0.72rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.vcols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 48px; }
+.vcols .vsec.wide { grid-column: 1 / -1; }
+.bullets { display: grid; gap: 9px; }
+.bullets li { padding-left: 20px; position: relative; }
+.bullets li::before { content: ""; position: absolute; left: 0; top: 0.78em; width: 9px; height: 1px; background: var(--muted); }
+blockquote { margin: 0; padding-left: 18px; border-left: 2px solid #c9ccd2; font-size: 1.05rem; }
+.drawings { display: grid; gap: 16px; }
+.dgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.dsheet { margin: 0; display: grid; gap: 8px; }
+.dsheet .paper { aspect-ratio: 17 / 11; display: grid; place-items: center; overflow: hidden; }
+.dsheet .paper img { max-height: 100%; object-fit: contain; }
+.dsheet figcaption { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.dsheet .tb { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.05em; color: var(--faint); text-transform: uppercase; }
+.dsheet.empty .paper { background: transparent; border: 1px dashed var(--line-2); color: var(--faint); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; text-align: center; padding: 18px; }
+
+/* ---------- Lightbox ---------- */
+.lightbox { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(3,4,6,0.97); display: none; }
+.lightbox[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.lbar { display: flex; align-items: center; gap: 10px; padding: 12px 16px 12px 24px; border-bottom: 1px solid var(--line); }
+.lbar .cap { margin-right: auto; color: var(--muted); font-size: 0.9rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lstage { overflow: auto; display: grid; place-items: center; padding: 20px; }
+.lstage img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+.lstage.sheet img { background: var(--sheet); padding: 12px; }
+.lstage.zoomed { place-items: start; }
+.lstage.zoomed img { max-width: none; max-height: none; width: 220%; cursor: zoom-out; }
+
+@media (max-width: 980px) {
+  .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .contact { grid-template-columns: 1fr; }
+  .earth-box { max-width: 340px; margin-inline: auto; width: 100%; }
+}
+@media (max-width: 760px) {
+  body { font-size: 16px; }
+  section.band { padding-block: 76px; }
+  .pgrid, .research, .about, .vcols, .quotes ul { grid-template-columns: 1fr; }
+  .agal .grid { grid-template-columns: 1fr 1fr; }
+  .agal figure:first-child { grid-column: 1 / -1; }
+  .research, .about { gap: 32px; }
+  .figs { grid-template-columns: 1fr; }
+  .figs figure.lead { grid-row: auto; }
+  .about .photo { max-width: 240px; }
+  .rows li { grid-template-columns: 1fr; }
+  .nav .name { display: none; }
+  .nav nav { margin-left: -8px; }
+  .stage-copy { padding-block: 90px 92px; background: linear-gradient(to top, #000 58%, rgba(0,0,0,0)); }
+  #rocket { width: 64px; }
+  .telemetry { right: auto; left: 24px; bottom: 30px; text-align: left; }
+  .cue { display: none; }
+  .viewer { width: 100%; max-height: 100%; height: 100%; border-radius: 0; border: 0; }
+  .vbody { padding: 26px 20px 48px; gap: 36px; }
+  .vbar { padding-left: 20px; }
+  .gallery { grid-template-columns: 1fr 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .viewer[open] { animation: none; }
+  .pcard, .pcard .cover img { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="name" href="#top" id="navName">Laurenz Felix</a>
+    <nav aria-label="Sections"><ul id="navlist"></ul></nav>
+    <a class="btn sm solid resume" id="navResume" href="#">Resume</a>
+  </div>
+</header>
+
+<aside class="rail" id="rail" aria-hidden="true">
+  <div class="track"></div><div class="flown" id="railFlown"></div>
+  <span class="body r-moon"></span><span class="body r-earth"></span>
+  <div id="railTicks"></div>
+  <div class="rail-rocket" id="railRocket"></div>
+</aside>
+
+<main id="top">
+  <section class="hero" id="hero" aria-label="Introduction">
+    <div class="stage">
+      <canvas id="moon" aria-hidden="true"></canvas>
+      <div id="rocket" aria-hidden="true"></div>
+      <div class="wrap stage-copy">
+        <div class="step step-a" id="stepA"></div>
+        <div class="step step-b" id="stepB"></div>
+      </div>
+      <div class="telemetry" aria-hidden="true"><span class="mono" id="telLabel">Distance to the Moon</span><b id="telValue">384,400 km</b></div>
+      <div class="cue mono" aria-hidden="true">Scroll to launch</div>
+    </div>
+  </section>
+
+  <section class="band" id="projects"><div class="wrap" id="projectsBody"></div></section>
+  <section class="band" id="research"><div class="wrap" id="researchBody"></div></section>
+  <section class="band" id="about"><div class="wrap" id="aboutBody"></div></section>
+  <section class="band" id="skills"><div class="wrap" id="skillsBody"></div></section>
+  <section class="band" id="leadership"><div class="wrap" id="leadershipBody"></div></section>
+  <section class="band" id="contact"><div class="wrap" id="contactBody"></div></section>
+</main>
+
+<footer><div class="wrap"><span id="footName"></span><span>Numbers on this page are labeled designed, simulated, estimated, tested, or planned. Moon map: NASA LRO.</span></div></footer>
+
+<dialog class="viewer" id="viewer" aria-labelledby="vTitle">
+  <div class="vbar"><span class="mono" id="vLabel"></span><button class="x" type="button" data-close aria-label="Close case study">&times;</button></div>
+  <div class="vbody" id="vBody"></div>
+</dialog>
+
+<dialog class="lightbox" id="lightbox" aria-label="Image viewer">
+  <div class="lbar"><span class="cap" id="lbCap"></span><a class="btn sm" id="lbPdf" href="#" hidden>Open PDF</a><button class="btn sm" type="button" id="lbZoom">Zoom</button><button class="x" type="button" data-close aria-label="Close image">&times;</button></div>
+  <div class="lstage" id="lbStage"><img id="lbImg" alt=""></div>
+</dialog>
+
+<script src="content.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ======================================================================
+   ENGINE. Reads everything from content.js. You should not need to edit
+   below this line to change words, numbers, photos, or drawings.
+   ====================================================================== */
+if (typeof SITE === "undefined" || typeof FEATURED === "undefined") {
+  const d = document.createElement("div"); d.className = "error-banner";
+  d.textContent = "content.js did not load or has a typo (often a missing comma or quote near your last edit). Fix it and reload.";
+  document.body.prepend(d);
+  throw new Error("content.js missing");
+}
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const kind = k => k ? `<span class="kind">${esc(k)}</span>` : "";
+const head = (sec, extra) => { const [l, t, s] = sec || []; return `<div class="band-head"><span class="mono">${esc(l)}</span>${t ? `<h2 class="silver">${esc(t)}</h2>` : ""}${(extra || s) ? `<p>${esc(extra || s)}</p>` : ""}</div>`; };
+const two = n => String(n).padStart(2, "0");
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* The rocket, drawn from the OpenRocket profile of my Level 1 build: long Von Karman nose,
+   one body tube, three swept fins (two seen edge to edge, one edge-on). Points right. */
+function rocketSVG(uid) {
+  return `<svg viewBox="0 0 130 30" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rb${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbfbfc"/><stop offset="0.5" stop-color="#c9ccd2"/><stop offset="1" stop-color="#6e737c"/></linearGradient>
+    <linearGradient id="rf${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.55" stop-color="#ffe9cf" stop-opacity="0.55"/><stop offset="1" stop-color="#fff" stop-opacity="0.95"/></linearGradient>
+  </defs>
+  <g class="flame" transform="translate(30 15) scale(0 1)"><path d="M0 -3.6 C -8 -3.6 -22 -1.2 -30 0 C -22 1.2 -8 3.6 0 3.6 Z" fill="url(#rf${uid})"/></g>
+  <path d="M40 10 L26 1 L19 1 L24 10 Z M40 20 L26 29 L19 29 L24 20 Z" fill="url(#rb${uid})"/>
+  <rect x="27" y="11.5" width="5" height="7" rx="1" fill="#55595f"/>
+  <path d="M30 10 H86 C100 10 116 12.6 124 15 C116 17.4 100 20 86 20 H30 Z" fill="url(#rb${uid})"/>
+  <path d="M22 14.2 H40 V15.8 H22 Z" fill="#8a8f97"/>
+  <path d="M86 10 V20" stroke="#8a8f97" stroke-width="0.6"/>
+</svg>`;
+}
+
+/* ---------------- Render ---------------- */
+$("navlist").innerHTML = NAV.map(([id, t]) => `<li><a href="#${id}">${esc(t)}</a></li>`).join("");
+$("navResume").href = SITE.resumeUrl;
+$("footName").textContent = SITE.name + " · Irvine, California";
+
+$("stepA").innerHTML = `<span class="mono eyebrow">${esc(SITE.eyebrow)}</span><h1 class="silver">${esc(SITE.headline)}</h1><p class="lede">${SITE.lede}</p>
+  <div class="cta"><a class="btn solid" href="#projects">See the work</a><a class="btn" href="${esc(SITE.resumeUrl)}">Resume (PDF)</a><a class="btn" href="#contact">Contact</a></div>`;
+$("stepB").innerHTML = `<h2 class="silver">${esc(SITE.secondHeadline)}</h2><p class="lede">${SITE.secondLede}</p>
+  <div class="now"><span class="mono">Currently</span><p>${esc(SITE.now)}</p></div>`;
+$("rocket").innerHTML = rocketSVG("h");
+$("railRocket").innerHTML = rocketSVG("r");
+
+/* Projects */
+function cover(p, i) {
+  const first = (p.images || []).find(m => m.src);
+  if (first) return `<div class="cover"><img src="${esc(first.src)}" alt="" loading="lazy"></div>`;
+  return `<div class="cover blank"><span class="crosshair"></span><span class="mono note">Photos and drawings coming</span><span class="idx silver">${two(i + 1)}</span></div>`;
+}
+function pcard(p, i) {
+  return `<article class="pcard">${cover(p, i)}
+    <div class="pbody">
+      <span class="pill ${p.done ? "done" : "live"}">${esc(p.status)}</span>
+      <div><h3>${esc(p.title)}</h3><p class="meta">${esc(p.meta)}</p></div>
+      <p class="sum">${esc(p.summary)}</p>
+      <ul class="mstats">${p.stats.map(([v, l, k]) => `<li><span class="v">${esc(v)}</span>${kind(k)}</li>`).join("")}</ul>
+      <button class="open" type="button" data-open="${esc(p.id)}" aria-label="Open the ${esc(p.title)} case study">Open case study <span class="arr" aria-hidden="true">&rarr;</span></button>
+    </div></article>`;
+}
+function zoomFig(m, cls) {
+  const paper = m.paper ? " paper" : "";
+  return `<figure class="${cls || ""}"><button class="zoom${paper}" type="button" data-full="${esc(m.src)}" data-cap="${esc(m.caption || m.alt || "")}" data-sheet="${m.paper ? 1 : 0}"><img src="${esc(m.src)}" alt="${esc(m.alt || "")}" loading="lazy"></button>${m.caption ? `<figcaption>${esc(m.caption)}</figcaption>` : ""}</figure>`;
+}
+function card(c) {
+  const list = (c.images || []).filter(m => m.src), sheets = list.filter(m => m.paper), photos = list.filter(m => !m.paper);
+  const imgs = sheets.map(m => `<div class="cmedia n1">${zoomFig(m)}</div>`).join("") +
+    (photos.length ? `<div class="cmedia n${Math.min(photos.length, 3)}">${photos.map(m => zoomFig(m)).join("")}</div>` : "");
+  return `<article class="card"><div><h3>${esc(c.title)}</h3><p class="meta">${esc(c.meta)}</p></div><span class="pill live">${esc(c.status)}</span>
+    <p>${esc(c.summary)}</p>${imgs}
+    <ul class="spec">${c.spec.map(([k, v, t]) => `<li><span class="k">${esc(k)}</span><span class="val">${esc(v)} ${kind(t)}</span></li>`).join("")}</ul>
+    <p class="muted" style="font-size:0.9rem">${esc(c.note)}</p></article>`;
+}
+$("projectsBody").innerHTML = head(SECTIONS.projects) +
+  `<div class="pgrid">${FEATURED.map(pcard).join("")}</div>
+   <h3 class="mono sub-head">${esc(SECTIONS.more[0])}</h3>
+   <div class="cards">${CARDS.map(card).join("")}</div>`;
+
+/* Research */
+$("researchBody").innerHTML = head([RESEARCH.label, RESEARCH.title, RESEARCH.role]) +
+  `<div class="research"><div class="prose"><span class="pill done">${esc(RESEARCH.status)}</span>${RESEARCH.body.map(p => `<p>${esc(p)}</p>`).join("")}
+     <div class="cta" style="margin-top:6px"><a class="btn solid" href="${esc(RESEARCH.paperUrl)}">Read the paper (PDF)</a></div></div>
+   <ul class="facts">${RESEARCH.facts.map(([k, v]) => `<li><span class="mono">${esc(k)}</span><span>${esc(v)}</span></li>`).join("")}</ul></div>
+   <div class="findings"><h3 class="mono">What I found</h3><ol>${RESEARCH.findings.map(f => `<li>${esc(f)}</li>`).join("")}</ol><p class="take silver">${esc(RESEARCH.conclusion)}</p></div>
+   <div class="figs">${RESEARCH.figures.map((f, i) => zoomFig(Object.assign({ paper: true }, f), i === 0 ? "lead" : "")).join("")}</div>
+   <p class="cite">${esc(RESEARCH.paperTitle)} Laurenz Felix, Irvine Hacker Fab, November 2026. The data in these figures comes from the industry and academic sources cited in the paper.</p>`;
+
+/* About */
+$("aboutBody").innerHTML = head(SECTIONS.about) +
+  `<div class="about"><div><img class="photo" src="${esc(ABOUT.photo)}" alt="${esc(ABOUT.photoAlt)}" width="560" height="560"><div class="id">${ABOUT.id.map(x => `<span>${esc(x)}</span>`).join("")}</div></div>
+   <div class="prose">${ABOUT.body.map(p => `<p>${esc(p)}</p>`).join("")}
+     ${(ABOUT.links || []).length ? `<div class="cta" style="margin-top:6px">${ABOUT.links.map(([t, u]) => `<a class="btn" href="${esc(u)}">${esc(t)} &nearr;</a>`).join("")}</div>` : ""}</div></div>
+   ${(ABOUT.gallery || []).length ? `<div class="agal"><h3 class="mono">${esc(ABOUT.galleryTitle || "")}</h3><div class="grid">${ABOUT.gallery.map(m => zoomFig(m)).join("")}</div></div>` : ""}
+   ${(ABOUT.quotes || []).length ? `<div class="quotes"><h3 class="mono">${esc(ABOUT.quotesTitle)}</h3><ul>${ABOUT.quotes.map(([q, by]) => `<li><q class="silver">${esc(q)}</q><span class="mono by">${by ? esc(by) : "&nbsp;"}</span></li>`).join("")}</ul></div>` : ""}`;
+
+/* Skills */
+$("skillsBody").innerHTML = head(SECTIONS.skills) +
+  `<ul class="rows">${SKILLS.map(([k, v]) => `<li><span class="mono">${esc(k)}</span><span>${esc(v)}</span></li>`).join("")}</ul>
+   <h3 class="mono sub-head">${esc(SECTIONS.credentials[0])}</h3>
+   <ul class="rows">${CREDENTIALS.map(([k, v]) => `<li><span class="mono">${esc(k)}</span><span>${esc(v)}</span></li>`).join("")}</ul>`;
+
+/* Leadership */
+$("leadershipBody").innerHTML = head(SECTIONS.leadership) +
+  `<div class="two">${LEADERSHIP.map(([o, r, d]) => `<article class="card"><div><h3>${esc(o)}</h3><p class="meta">${esc(r)}</p></div><p>${esc(d)}</p></article>`).join("")}</div>`;
+
+/* Contact */
+$("contactBody").innerHTML = head(SECTIONS.contact, CONTACT.line) +
+  `<div class="contact"><div class="contact-grid">
+    ${CONTACT.emails.map(([l, a]) => `<div class="contact-row"><div class="who"><span class="mono">${esc(l)} email</span><span class="addr">${esc(a)}</span></div>
+      <div class="acts"><button class="btn sm" type="button" data-copy="${esc(a)}">Copy</button><a class="btn sm" href="mailto:${esc(a)}">Open in mail</a></div></div>`).join("")}
+    ${CONTACT.links.map(([l, t, u]) => `<div class="contact-row"><div class="who"><span class="mono">${esc(l)}</span><span class="addr">${esc(t)}</span></div>
+      <div class="acts"><a class="btn sm" href="${esc(u)}">Open</a></div></div>`).join("")}
+    <div class="contact-row"><div class="who"><span class="mono">Resume</span><span class="addr">One page, PDF</span></div><div class="acts"><a class="btn sm solid" href="${esc(SITE.resumeUrl)}">Download resume</a></div></div>
+  </div>
+  <div class="earth-box"><canvas id="earth" aria-label="A small cartoon Earth with a pin on Irvine, California" role="img"></canvas><span class="mono tag">${esc(SITE.home.name)}</span></div></div>`;
+
+/* ---------------- Interactions ---------------- */
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-copy]");
+  if (!b) return;
+  const done = ok => { b.textContent = ok ? "Copied" : "Select the address to copy"; setTimeout(() => b.textContent = "Copy", 1800); };
+  try { navigator.clipboard.writeText(b.dataset.copy).then(() => done(true), () => done(false)); } catch (err) { done(false); }
+});
+
+/* Project viewer */
+const viewer = $("viewer"), lightbox = $("lightbox");
+const lock = () => document.documentElement.classList.toggle("locked", viewer.open || lightbox.open);
+function block(b) {
+  let inner = "";
+  if (b.list) inner = `<ul class="bullets">${b.list.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  if (b.p) inner = `<p>${esc(b.p)}</p>`;
+  if (b.quote) inner = `<blockquote><p>${esc(b.quote)}</p></blockquote>`;
+  const wide = (b.p && b.p.length > 420) || b.quote ? " wide" : "";
+  return `<div class="vsec${wide}"><h4>${esc(b.h)}</h4>${inner}</div>`;
+}
+function gallery(p) {
+  const figs = (p.images || []).map(m => m.video
+    ? `<figure><a class="slot" href="${esc(m.video)}"><span style="font-size:1.4rem">&#9654;</span>Watch the video</a>${m.caption ? `<figcaption>${esc(m.caption)}</figcaption>` : ""}</figure>`
+    : zoomFig(m));
+  const empty = SITE.showPlaceholders ? (p.slots || []).map(s => `<figure><div class="slot">${esc(s)}</div></figure>`) : [];
+  return (figs.length || empty.length) ? `<div class="gallery">${figs.join("")}${empty.join("")}</div>` : "";
+}
+function drawings(p) {
+  const d = p.drawings || [];
+  if (!d.length && !SITE.showPlaceholders) return "";
+  const sheets = d.length ? d.map(x => `<figure class="dsheet"><button class="zoom paper" type="button" data-full="${esc(x.src)}" data-cap="${esc(x.title)}" data-sheet="1" data-pdf="${esc(x.pdf || "")}"><img src="${esc(x.src)}" alt="Engineering drawing: ${esc(x.title)}" loading="lazy"></button>
+      <figcaption><span>${esc(x.title)}</span><span class="tb">${[x.number, x.rev ? "Rev " + x.rev : ""].filter(Boolean).map(esc).join(" · ")}</span></figcaption></figure>`).join("")
+    : `<figure class="dsheet empty"><div class="paper">GD&amp;T drawings coming soon</div></figure>`;
+  return `<div class="drawings"><span class="vlabel">Engineering drawings</span><div class="dgrid">${sheets}</div></div>`;
+}
+function openProject(id, fromHash) {
+  const i = FEATURED.findIndex(p => p.id === id); if (i < 0) return;
+  const p = FEATURED[i], blocks = p.blocks.slice();
+  if (SITE.showTeamDetails && p.teamOnly) blocks.splice(1, 0, { h: "Trade study results", list: p.teamOnly });
+  const links = (p.links || []).map(([t, u]) => `<a class="btn sm" href="${esc(u)}">${esc(t)} &nearr;</a>`).join("");
+  $("vLabel").textContent = `Case study ${two(i + 1)} of ${two(FEATURED.length)}`;
+  $("vBody").innerHTML = `<div class="vhead"><span class="pill ${p.done ? "done" : "live"}">${esc(p.status)}</span><h2 class="silver" id="vTitle">${esc(p.title)}</h2><p class="meta">${esc(p.meta)}</p><p class="sum">${esc(p.summary)}</p></div>
+    <div class="stats">${p.stats.map(([v, l, k]) => `<div class="stat"><span class="v">${esc(v)}</span><span class="l">${esc(l)}</span><span>${kind(k)}</span></div>`).join("")}</div>
+    ${gallery(p)}
+    <div class="vcols">${blocks.map(block).join("")}</div>
+    ${drawings(p)}
+    ${links ? `<div class="cta" style="margin:0">${links}</div>` : ""}`;
+  if (!viewer.open) { try { viewer.showModal(); } catch (e) { viewer.setAttribute("open", ""); } }
+  viewer.scrollTop = 0; lock();
+  if (!fromHash && location.hash !== "#" + id) { try { history.pushState(null, "", "#" + id); } catch (e) { location.hash = id; } }
+}
+function closeViewer() { if (viewer.open) viewer.close(); }
+viewer.addEventListener("close", () => {
+  lock();
+  if (FEATURED.some(p => "#" + p.id === location.hash)) { try { history.replaceState(null, "", location.pathname + location.search + "#projects"); } catch (e) {} }
+});
+viewer.addEventListener("click", e => { if (e.target === viewer) closeViewer(); });
+document.addEventListener("click", e => {
+  const o = e.target.closest("[data-open]"); if (o) { openProject(o.dataset.open); return; }
+  const c = e.target.closest("[data-close]"); if (c) { c.closest("dialog").close(); return; }
+  const z = e.target.closest("[data-full]"); if (z) openLightbox(z);
+});
+window.addEventListener("hashchange", () => {
+  const id = location.hash.slice(1);
+  if (FEATURED.some(p => p.id === id)) openProject(id, true); else closeViewer();
+});
+
+/* Lightbox for photos, figures, and drawings */
+function openLightbox(z) {
+  $("lbImg").src = z.dataset.full; $("lbImg").alt = z.dataset.cap || "";
+  $("lbCap").textContent = z.dataset.cap || "";
+  $("lbStage").className = "lstage" + (z.dataset.sheet === "1" ? " sheet" : "");
+  const pdf = z.dataset.pdf; $("lbPdf").hidden = !pdf; if (pdf) $("lbPdf").href = pdf;
+  $("lbZoom").textContent = "Zoom";
+  try { lightbox.showModal(); } catch (e) { lightbox.setAttribute("open", ""); }
+  lock();
+}
+$("lbZoom").addEventListener("click", () => { const s = $("lbStage"); s.classList.toggle("zoomed"); $("lbZoom").textContent = s.classList.contains("zoomed") ? "Fit" : "Zoom"; });
+$("lbImg").addEventListener("click", () => $("lbZoom").click());
+lightbox.addEventListener("close", lock);
+lightbox.addEventListener("click", e => { if (e.target === lightbox) lightbox.close(); });
+
+/* Nav highlight */
+(function () {
+  const links = [...document.querySelectorAll("#navlist a")];
+  if (!("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting) links.forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + en.target.id ? "true" : "false"));
+  }), { rootMargin: "-45% 0px -50% 0px" });
+  NAV.forEach(([id]) => $(id) && io.observe($(id)));
+})();
+
+/* Flight rail: leaves the Moon at the top of the page and lands on Earth at the bottom. */
+(function () {
+  const rail = $("rail"), ticks = $("railTicks"), rocket = $("railRocket"), flown = $("railFlown");
+  ticks.innerHTML = NAV.map(([id, t]) => `<a class="tick" href="#${id}" tabindex="-1" data-id="${id}"><span class="mono">${esc(t)}</span></a>`).join("");
+  const tickEls = [...ticks.children];
+  let marks = [], raf = 0;
+  function layout() {
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight), h = rail.clientHeight - 40;
+    marks = tickEls.map(a => { const f = Math.min(1, $(a.dataset.id).offsetTop / max); a.style.top = (20 + f * h) + "px"; return f; });
+    update();
+  }
+  function update() {
+    raf = 0;
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight), f = Math.min(1, Math.max(0, scrollY / max)), h = rail.clientHeight - 40;
+    rocket.style.top = (20 + f * h) + "px"; flown.style.height = (f * h) + "px";
+    tickEls.forEach((a, i) => a.classList.toggle("passed", f >= marks[i] - 0.002));
+    rail.classList.toggle("on", scrollY > $("hero").offsetHeight - innerHeight * 0.4);
+  }
+  addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+  addEventListener("resize", layout);
+  addEventListener("load", layout);
+  layout();
+})();
+
+/* ---------------- Moon and the hero rocket ---------------- */
+(function () {
+  const root = document.documentElement, canvas = $("moon"), hero = $("hero"), stage = hero.querySelector(".stage");
+  const rocketEl = $("rocket"), flame = rocketEl.querySelector(".flame"), telV = $("telValue"), telL = $("telLabel"), cue = hero.querySelector(".cue");
+  const small = window.matchMedia("(max-width: 760px)").matches;
+  const fallback = () => { canvas.remove(); rocketEl.remove(); const d = document.createElement("div"); d.className = "moon-static"; d.setAttribute("aria-hidden", "true"); stage.prepend(d); root.classList.remove("motion"); root.classList.add("static"); };
+  if (!window.THREE) return fallback();
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: !small, alpha: false, powerPreference: "high-performance" }); } catch (e) { return fallback(); }
+  root.classList.add(reduce ? "static" : "motion");
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, small ? 1.5 : 2));
+  renderer.setClearColor(0x000000, 1);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(35, 1, 0.1, 200);
+  const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, metalness: 0 });
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(1, small ? 64 : 128, small ? 48 : 96), mat);
+  moon.visible = false; moon.rotation.z = 0.08; scene.add(moon);
+  new THREE.TextureLoader().load(small ? SITE.moonMapSmall : SITE.moonMap, tex => {
+    tex.encoding = THREE.sRGBEncoding;
+    tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    mat.map = tex; mat.bumpMap = tex; mat.bumpScale = small ? 0.018 : 0.028; mat.needsUpdate = true;
+    moon.visible = true; kick();
+  }, undefined, () => fallback());
+
+  const sun = new THREE.DirectionalLight(0xfffaf2, 2.1); scene.add(sun);
+  scene.add(new THREE.AmbientLight(0x9fb0c8, 0.03));
+  /* Earthshine: a faint fill from the camera side so the dark limb is not pure black. */
+  const shine = new THREE.DirectionalLight(0x8fb4ff, 0.05); shine.position.set(0, 0, 10); scene.add(shine);
+  function stars(n, size, op, rad) {
+    const g = new THREE.BufferGeometry(), p = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { const u = Math.random() * 2 - 1, a = Math.random() * 6.2832, r = Math.sqrt(1 - u * u); p[i * 3] = r * Math.cos(a) * rad; p[i * 3 + 1] = u * rad; p[i * 3 + 2] = r * Math.sin(a) * rad; }
+    g.setAttribute("position", new THREE.BufferAttribute(p, 3));
+    return new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size, transparent: true, opacity: op, sizeAttenuation: true, depthWrite: false }));
+  }
+  const starA = stars(small ? 500 : 1200, small ? 0.16 : 0.12, 0.55, 70), starB = stars(small ? 40 : 90, small ? 0.34 : 0.28, 0.9, 70);
+  scene.add(starA, starB);
+
+  const stepA = $("stepA"), stepB = $("stepB");
+  const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  const bez = (a, b, c, t) => (1 - t) * (1 - t) * a + 2 * (1 - t) * t * b + t * t * c;
+  let W = 0, H = 0, p = 0, last = 0, vel = 0, visible = true, raf = 0, t0 = performance.now();
+  const v3 = new THREE.Vector3();
+
+  function size() { W = stage.clientWidth; H = stage.clientHeight; renderer.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix(); }
+  function progress() { const r = hero.getBoundingClientRect(), span = Math.max(1, hero.offsetHeight - stage.offsetHeight); p = reduce ? 0 : Math.min(1, Math.max(0, -r.top / span)); }
+  function frame(now) {
+    raf = 0;
+    const wide = W > 900, t = reduce ? 0 : (now - t0) / 1000;
+    const a = 2.25 - p * 2.05;                                      // crescent at the top, nearly full on arrival
+    sun.position.set(Math.sin(a) * 8, 1.4, Math.cos(a) * 8);
+    moon.rotation.y = -Math.PI / 2 + 0.35 + p * 0.5 + t * 0.008;    // near side toward us, drifting slowly
+    moon.position.set(wide ? 1.45 : 0, wide ? 0.12 : 1.28, 0);
+    cam.position.set(0, 0, (wide ? 5.6 : 9.4) - p * (wide ? 1.0 : 1.3));
+    cam.lookAt(wide ? 0.2 : 0, 0, 0);
+    starA.rotation.y = t * 0.004; starB.rotation.y = t * 0.004;
+    renderer.render(scene, cam);
+
+    /* Rocket: launches from low in the frame and arcs into the Moon's lit limb. */
+    v3.copy(moon.position).project(cam);
+    const mx = (v3.x + 1) / 2 * W, my = (1 - v3.y) / 2 * H;
+    const mr = (1 / cam.position.distanceTo(moon.position)) / Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * H / 2;
+    const q = ss(0.02, 0.86, p);
+    const sx = wide ? W * 0.5 : W * 0.84, sy = wide ? H - 128 : H * 0.44;
+    const ex = mx - mr * (wide ? 0.62 : -0.55), ey = my + mr * (wide ? 0.62 : 0.66);
+    const cx = wide ? W * 0.47 : W * 0.97, cy = wide ? H * 0.42 : H * 0.36;
+    const x = bez(sx, cx, ex, q), y = bez(sy, cy, ey, q);
+    const dx = bez(sx, cx, ex, Math.min(1, q + 0.01)) - x, dy = bez(sy, cy, ey, Math.min(1, q + 0.01)) - y;
+    const ang = q < 0.002 ? -Math.PI / 2 + 0.25 : Math.atan2(dy, dx);
+    const sc = 1 - q * 0.72, bob = q < 0.002 ? Math.sin(t * 1.6) * 3 : 0;
+    const rw = rocketEl.offsetWidth, rh = rw * 30 / 130;
+    rocketEl.style.transform = `translate(${x - rw / 2}px, ${y - rh / 2 + bob}px) rotate(${ang}rad) scale(${sc})`;
+    rocketEl.style.opacity = 1 - ss(0.84, 0.95, p);
+    vel += ((Math.abs(p - last) * 60) - vel) * 0.15; last = p;
+    const burn = q > 0.002 && q < 0.995 ? Math.min(1.6, 0.55 + vel * 9 + Math.sin(t * 40) * 0.06) : 0;
+    flame.setAttribute("transform", `translate(30 15) scale(${burn.toFixed(3)} 1)`);
+    const km = Math.round(384400 * (1 - q));
+    telV.textContent = km <= 0 ? "Arrived" : km.toLocaleString("en-US") + " km";
+    telL.textContent = km <= 0 ? "Lunar orbit" : "Distance to the Moon";
+
+    if (!reduce) {
+      const oa = 1 - ss(0.26, 0.44, p), ob = ss(0.48, 0.66, p);
+      stepA.style.opacity = oa; stepA.style.transform = `translateY(${-(1 - oa) * 24}px)`; stepA.style.pointerEvents = oa > 0.5 ? "auto" : "none";
+      stepB.style.opacity = ob; stepB.style.transform = `translateY(${(1 - ob) * 24}px)`; stepB.style.pointerEvents = ob > 0.5 ? "auto" : "none";
+      cue.style.opacity = 1 - ss(0, 0.08, p);
+      if (visible) raf = requestAnimationFrame(frame);
+    }
+  }
+  function kick() { progress(); if (!raf) raf = requestAnimationFrame(frame); }
+  size(); kick();
+  addEventListener("resize", () => { size(); kick(); });
+  addEventListener("scroll", kick, { passive: true });
+  if ("IntersectionObserver" in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(hero);
+  canvas.addEventListener("webglcontextlost", e => { e.preventDefault(); fallback(); });
+})();
+
+/* ---------------- The little Earth ---------------- */
+(function () {
+  const canvas = $("earth"); if (!canvas) return;
+  const box = canvas.parentElement;
+  const fallback = () => { const d = document.createElement("div"); d.className = "earth-static"; d.setAttribute("aria-hidden", "true"); canvas.replaceWith(d); };
+  if (!window.THREE) return fallback();
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { return fallback(); }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+  cam.position.set(0, 0.35, 5.2); cam.lookAt(0, 0, 0);
+
+  /* Three flat tones of light give the soft cartoon shading. */
+  const ramp = new THREE.DataTexture(new Uint8Array([70, 70, 70, 255, 160, 160, 160, 255, 255, 255, 255, 255]), 3, 1, THREE.RGBAFormat);
+  ramp.minFilter = ramp.magFilter = THREE.NearestFilter; ramp.needsUpdate = true;
+  const tilt = new THREE.Group(); tilt.rotation.z = 0.32; tilt.rotation.x = 0.18; scene.add(tilt);
+  const spin = new THREE.Group(); tilt.add(spin);
+  const emat = new THREE.MeshToonMaterial({ color: 0x4f8fd8, gradientMap: ramp });
+  const earth = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 48), emat); spin.add(earth);
+  new THREE.TextureLoader().load(SITE.earthMap, tex => { tex.encoding = THREE.sRGBEncoding; emat.map = tex; emat.color.set(0xffffff); emat.needsUpdate = true; kick(); });
+
+  /* Pin on home. */
+  const ll = (lat, lon, r) => { const ph = (lon + 180) * Math.PI / 180, th = (90 - lat) * Math.PI / 180; return new THREE.Vector3(-Math.cos(ph) * Math.sin(th) * r, Math.cos(th) * r, Math.sin(ph) * Math.sin(th) * r); };
+  const pin = new THREE.Group(), base = ll(SITE.home.lat, SITE.home.lon, 1);
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.22, 8), new THREE.MeshToonMaterial({ color: 0xe9ebee, gradientMap: ramp }));
+  stem.position.y = 0.11; pin.add(stem);
+  const headM = new THREE.Mesh(new THREE.SphereGeometry(0.055, 20, 14), new THREE.MeshToonMaterial({ color: 0xff6a5c, gradientMap: ramp }));
+  headM.position.y = 0.24; pin.add(headM);
+  pin.position.copy(base); pin.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), base.clone().normalize()); spin.add(pin);
+
+  /* A few puffy clouds on their own slow orbit. */
+  const clouds = new THREE.Group(), cmat = new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: ramp });
+  [[28, -40], [-12, 20], [48, 110], [-38, 160], [8, -120], [60, 30], [-55, -80]].forEach(([la, lo], i) => {
+    const c = new THREE.Group(), pos = ll(la, lo, 1.1);
+    [[0, 0, 0, 0.075], [0.07, 0.01, 0.02, 0.06], [-0.065, -0.005, 0.01, 0.055], [0.02, 0.035, -0.02, 0.05]].forEach(([x, y, z, r]) => { const s = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10), cmat); s.position.set(x, y, z); c.add(s); });
+    c.position.copy(pos); c.lookAt(0, 0, 0); c.scale.setScalar(0.85 + (i % 3) * 0.15); clouds.add(c);
+  });
+  tilt.add(clouds);
+
+  const sun = new THREE.DirectionalLight(0xffffff, 1.05); sun.position.set(-3, 2.2, 4); scene.add(sun);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.42));
+
+  /* Start with Irvine facing us, then spin slowly. */
+  const face = Math.atan2(base.x, base.z);
+  let raf = 0, visible = false, t0 = performance.now();
+  function size() { const s = canvas.clientWidth; renderer.setSize(s, s, false); cam.aspect = 1; cam.updateProjectionMatrix(); }
+  function frame(now) {
+    raf = 0;
+    const t = reduce ? 0 : (now - t0) / 1000;
+    spin.rotation.y = -face + t * 0.16;
+    clouds.rotation.y = -face + t * 0.2;
+    headM.position.y = 0.24 + Math.sin(t * 2.2) * 0.012;
+    renderer.render(scene, cam);
+    if (!reduce && visible) raf = requestAnimationFrame(frame);
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+  size(); kick();
+  addEventListener("resize", () => { size(); kick(); });
+  if ("IntersectionObserver" in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(box);
+  else { visible = true; kick(); }
+})();
+
+/* Open a case study straight from a link like .../#rover */
+if (FEATURED.some(p => "#" + p.id === location.hash)) openProject(location.hash.slice(1), true);
+</script>
+<!-- Visitor stats: paste the GoatCounter script tag on the line above </body>. -->
+</body>
+</html>
