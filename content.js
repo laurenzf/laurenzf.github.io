@@ -85,7 +85,7 @@ const RESEARCH = {
 
 const FEATURED = [
   {
-    id: "thruster",
+    id: "thruster", short: "CubeSat thruster",
     title: "Cold-gas thruster for a 12U CubeSat",
     meta: "Drag Sail Deorbit CubeSat · SEDS UCI · Propulsion Engineer · Oct 2026 to present",
     status: "In progress", done: false,
@@ -117,7 +117,7 @@ const FEATURED = [
     drawings: []
   },
   {
-    id: "tvc",
+    id: "tvc", short: "TVC rocket",
     title: "Thrust vector control rocket",
     meta: "Personal project · Jun 2026 to present",
     status: "In design", done: false,
@@ -142,7 +142,7 @@ const FEATURED = [
     drawings: []
   },
   {
-    id: "rover",
+    id: "rover", short: "Fire-extinguishing rover",
     title: "Fire-extinguishing rover",
     meta: "FUSION Engineering Project · Mechanical Subteam · Jan to Jun 2026",
     status: "Finished", done: true,
